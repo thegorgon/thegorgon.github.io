@@ -1,4 +1,4 @@
-thegorgon.github.com-
+the gorgon lab
 =====================
 
 The Gorgon GitHub Page
