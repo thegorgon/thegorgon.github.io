@@ -1,0 +1,22 @@
+<html>
+  <head>
+    <title>the gorgon lab - kmeans demonstration</title>
+    <script type="text/javascript" src="/js/jquery.js"></script>
+  </head>
+  <body>
+    <h1>the gorgon lab - kmeans demonstration</h1>
+    <canvas id="kmeans-demo"></canvas>
+
+    <script type="text/javascript">
+      $(document).ready(function(e) {
+        var canvas = $('#kmeans-demo')[0];
+        if ($.isFunction(canvas.getContext)) {
+          var context = canvas.getContext('2d');
+          alert("We're gonna do it");
+        } else {
+          alert("Canvas is not supported in your browser.");
+        }
+      });
+    </script>
+  </body>
+</html>
