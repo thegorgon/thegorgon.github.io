@@ -54,6 +54,8 @@ window.Gorgon.Kmeans.prototype = {
     this.interval = interval;
   },
   randomizePoints: function() {
+    this.resetAssignments();
+    this.points = new Array(this.pointCount);
     var maxX = this.canvas.width;
     var maxY = this.canvas.height;
 
@@ -93,19 +95,24 @@ window.Gorgon.Kmeans.prototype = {
   draw: function() {
     var kmeans = this, clusterCenter;
     kmeans.clear();
-    var count = 0;
-    $.each(kmeans.points, function(pointIdx) {
-      kmeans.drawDataPoint(this);
+    if (kmeans.points) {
+      $.each(kmeans.points, function(pointIdx) {
+        kmeans.drawDataPoint(this);
 
-      clusterCenter = kmeans.pointAssignments[pointIdx];
-      if (clusterCenter) {
-        count += 1
-        kmeans.drawAssociation(this, clusterCenter);
-      }
-    });
-    $.each(kmeans.clusters, function(clusterIdx) {
-      kmeans.drawClusterCenter(this);
-    });
+        if (kmeans.pointAssignments) {
+          clusterCenter = kmeans.pointAssignments[pointIdx];
+          if (clusterCenter) {
+            kmeans.drawAssociation(this, clusterCenter);
+          }
+        }
+      });
+    }
+    if (kmeans.clusters) {
+      $.each(kmeans.clusters, function(clusterIdx) {
+        kmeans.drawClusterCenter(this);
+      });
+    }
+    // kmeans.drawExecutionMeanClusters();
   },
   getMeanValuePerExecution: function(key) {
     var sum = 0, count = 0, kmeans = this, value = null;
@@ -128,6 +135,29 @@ window.Gorgon.Kmeans.prototype = {
   getExecutionMeanDistanceBetweenPointsAndClusters: function() {
     return this.getMeanValuePerExecution('distance');
   },
+  // drawExecutionMeanClusters: function() {
+  //   var clusterLists = new Array(this.clusterCount), kmeans = this,
+  //     execution, cluster, clusterCenter;
+  //   if (kmeans.executions) {
+  //     $.each(kmeans.executions, function(i) {
+  //       execution = kmeans.executions[i];
+  //       if (execution && execution.clusters) {
+  //         $.each(execution.clusters, function(j) {
+  //           cluster = execution.clusters[j];
+  //           clusterLists[j] = clusterLists[j] || [];
+  //           clusterLists[j].push(cluster);
+  //         });
+  //       }
+  //     });
+
+  //     $.each(clusterLists, function(i) {
+  //       if (clusterLists[i]) {
+  //         clusterCenter = kmeans._centerPoint(clusterLists[i]);
+  //         kmeans.drawClusterMean(clusterCenter);
+  //       }
+  //     });
+  //   }
+  // },
   getIterationMeanDistanceBetweenPointsAndClusters: function() {
     var sum = 0, kmeans = this, point, cluster;
     $.each(kmeans.pointAssignments, function(index) {
@@ -154,13 +184,17 @@ window.Gorgon.Kmeans.prototype = {
   execute: function(count, callback) {
     count = parseInt(count, 10);
     this.executionIndex = 0;
-    this.points = new Array(this.pointCount);
+    if (!this.points) {
+      this.randomizePoints();
+    }
+    this.resetAssignments();
+    this.executions = new Array(count);
+    this._executeHelper(count, callback)
+  },
+  resetAssignments: function() {
     this.pointAssignments = new Array(this.pointCount);
     this.clusters = new Array(this.clusterCount);
     this.clusterAssignments = new Array(this.clusterCount);
-    this.executions = new Array(count);
-    this.randomizePoints();
-    this._executeHelper(count, callback)
   },
   _executeHelper: function(count, callback) {
     var kmeans = this;
@@ -179,7 +213,8 @@ window.Gorgon.Kmeans.prototype = {
             kmeans.executionIndex += 1;
             kmeans.executions[kmeans.executionIndex] = {
               iterations: kmeans.iterationIndex,
-              distance: kmeans.getIterationMeanDistanceBetweenPointsAndClusters()
+              distance: kmeans.getIterationMeanDistanceBetweenPointsAndClusters(),
+              clusters: kmeans.clusters.slice()
             };
             setTimeout(function() {
               kmeans._executeHelper(count - 1, callback);
@@ -247,21 +282,27 @@ window.Gorgon.Kmeans.prototype = {
     });
     return changed;
   },
+  _centerPoint: function(points) {
+    var sumX = 0;
+    var sumY = 0;
+    var count = 0;
+    $.each(points, function(i) {
+      sumX = sumX + this.x;
+      sumY = sumY + this.y;
+      count = count + 1;
+    });
+    return {
+      x: sumX/(count * 1.0),
+      y: sumY/(count * 1.0)
+    }
+  },
   updateClustersPerAssignment: function() {
-    var kmeans = this, points, sumX, sumY, ptCount;
+    var kmeans = this, center;
 
-    $.each(this.clusters, function(index) {
-      points = kmeans.clusterAssignments[this.index];
-      sumX = 0;
-      sumY = 0;
-      count = 0;
-      $.each(points, function(pointIndex) {
-        sumX = sumX + this.x;
-        sumY = sumY + this.y;
-        count = count + 1;
-      });
-      this.x = sumX/(count * 1.0);
-      this.y = sumY/(count * 1.0);
+    $.each(kmeans.clusters, function(index) {
+      center = kmeans._centerPoint(kmeans.clusterAssignments[this.index]);
+      this.x = center.x;
+      this.y = center.y;
     });
   }
 };

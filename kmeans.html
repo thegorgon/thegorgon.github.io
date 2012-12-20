@@ -24,13 +24,16 @@
             <label for="point-count">Cluster Count :</label>
             <input type="number" id="cluster-count" name="cluster-count" value="5" />
             <label for="execution-count">Execution Count :</label>
-            <input type="number" id="execution-count" name="execution-count" value="100" />
+            <input type="number" id="execution-count" name="execution-count" value="10" />
             <select id="point-generation" name="point-generation">
               <option value="random">Random Partition</option>
               <option value="forgy">Forgy Partition</option>
             </select>
-            <button id="generate" name="generate">
+            <button id="execute" name="execute">
               execute
+            </button>
+            <button id="generate" name="generate">
+              regenerate points
             </button>
             <div class="demo-logging">
               <div id="iteration-log"></div>
@@ -47,14 +50,20 @@
         var canvas = $('#kmeans-demo')[0];
         var kmeans = new Gorgon.Kmeans(canvas);
         kmeans.drawText("Set Parameters and Press Execute to Begin");
-
-        $("#kmeans-controls").submit(function(e) {
-          e.preventDefault();
+        var setup = function() {
           $('#execution-log').html('');
           kmeans.setPointCount($('#point-count').val());
           kmeans.setClusterCount($('#cluster-count').val());
           kmeans.setClusterGeneration($('#point-generation').val());
           kmeans.setIterationInterval(Math.min(100.0, 10000.0/$('#execution-count').val()));
+        };
+        var generate = function() {
+          setup();
+          kmeans.randomizePoints();
+          kmeans.draw();
+        };
+        var execute = function() {
+          setup();
           kmeans.execute($('#execution-count').val(),
             function(finished) {
               var average = this.getMeanIterationsPerExecution();
@@ -66,6 +75,16 @@
               }
               $('#execution-log').html("<p>Iterations per execution: <strong>" + average.toFixed(3) + "</strong>, Executions: <strong>" + this.getExecutionHumanIndex() + "</strong>. Mean distance : <strong>" + this.getExecutionMeanDistanceBetweenPointsAndClusters().toFixed(3) + "</strong></p>");
           });
+        };
+        $("#execute").click(function(e) {
+          e.preventDefault();
+          execute();
+          return false;
+        });
+
+        $("#generate").click(function(e) {
+          e.preventDefault();
+          generate();
           return false;
         });
       });

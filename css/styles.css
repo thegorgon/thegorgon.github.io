@@ -830,6 +830,9 @@ a, a:visited {
   display: inline-block; }
 .demo-controls label {
     font-weight: bold; }
+.link-fodder {
+  margin-top: 30px;
+}
 nav.ext {
   clear: both;
   width: 200px;
