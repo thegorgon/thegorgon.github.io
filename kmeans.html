@@ -20,7 +20,7 @@
           <canvas id="kmeans-demo" width="900" height="400"></canvas>
           <form id="kmeans-controls" class="demo-controls">
             <label for="point-count">Point Count :</label>
-            <input type="number" id="point-count" name="point-count" value="100" />
+            <input type="number" id="point-count" name="point-count" value="1000" />
             <label for="point-count">Cluster Count :</label>
             <input type="number" id="cluster-count" name="cluster-count" value="5" />
             <label for="execution-count">Execution Count :</label>
@@ -33,7 +33,7 @@
               execute
             </button>
             <button id="generate" name="generate">
-              regenerate points
+              generate points
             </button>
             <div class="demo-logging">
               <div id="iteration-log"></div>
@@ -48,8 +48,9 @@
         $.stretcher.init();
         $("select").chosen();
         var canvas = $('#kmeans-demo')[0];
-        var kmeans = new Gorgon.Kmeans(canvas);
-        kmeans.drawText("Set Parameters and Press Execute to Begin");
+        var drawing = new Gorgon.Drawing(canvas);
+        var kmeans = new Gorgon.Kmeans(drawing);
+        drawing.drawText("Set Parameters and Press Execute to Begin");
         var setup = function() {
           $('#execution-log').html('');
           kmeans.setPointCount($('#point-count').val());
@@ -78,12 +79,14 @@
         };
         $("#execute").click(function(e) {
           e.preventDefault();
+          e.stopPropagation();
           execute();
           return false;
         });
 
         $("#generate").click(function(e) {
           e.preventDefault();
+          e.stopPropagation();
           generate();
           return false;
         });

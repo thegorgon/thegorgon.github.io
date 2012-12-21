@@ -1,17 +1,13 @@
 window.Gorgon = window.Gorgon || {};
-window.Gorgon.Kmeans = function(canvas) {
+window.Gorgon.Drawing = function(canvas) {
   this.canvas = canvas;
-  this.interval = 100;
-  this.pointCount = 0;
-  this.clusterCount = 0;
-
   if ($.isFunction(this.canvas.getContext)) {
     this.context = this.canvas.getContext('2d');
   } else {
     alert("Canvas is not supported in your browser.");
   }
 };
-window.Gorgon.Kmeans.prototype = {
+window.Gorgon.Drawing.prototype = {
   drawPoint: function(x, y, r, color) {
     this.context.beginPath();
     this.context.fillStyle = color;
@@ -30,16 +26,33 @@ window.Gorgon.Kmeans.prototype = {
     this.context.font = "20pt Helvetica";
     this.context.fillStyle = color || "#333";
     this.context.textAlign = "center";
-    this.context.fillText(text, this.canvas.width* 0.5, this.canvas.height*0.5);
+    this.context.fillText(text, this.getWidth()*0.5, this.getHeight()*0.5);
   },
+  clear: function() {
+    this.context.clearRect(0, 0, this.getWidth(), this.getHeight());
+  },
+  getWidth: function() {
+    return this.canvas.width;
+  },
+  getHeight: function() {
+    return this.canvas.height;
+  }
+}
+window.Gorgon.Kmeans = function(drawing) {
+  this.drawing = drawing;
+  this.interval = 100;
+  this.pointCount = 0;
+  this.clusterCount = 0;
+};
+window.Gorgon.Kmeans.prototype = {
   drawClusterCenter: function(center) {
-    this.drawPoint(center.x, center.y, 5, "#ff0000");
+    this.drawing.drawPoint(center.x, center.y, 5, "#ff0000");
   },
   drawDataPoint: function(data) {
-    this.drawPoint(data.x, data.y, 2, "#0000ff");
+    this.drawing.drawPoint(data.x, data.y, 2, "#0000ff");
   },
   drawAssociation: function(data, center) {
-    this.drawLine(data.x, data.y, center.x, center.y, "#00ff00");
+    this.drawing.drawLine(data.x, data.y, center.x, center.y, "#00ff00");
   },
   setClusterCount: function(k) {
     this.clusterCount = parseInt(k, 10);
@@ -56,8 +69,8 @@ window.Gorgon.Kmeans.prototype = {
   randomizePoints: function() {
     this.resetAssignments();
     this.points = new Array(this.pointCount);
-    var maxX = this.canvas.width;
-    var maxY = this.canvas.height;
+    var maxX = this.drawing.getWidth();
+    var maxY = this.drawing.getHeight();
 
     for (var i = 0; i < this.pointCount; i+=1) {
       var x = Math.random() * maxX;
@@ -70,8 +83,8 @@ window.Gorgon.Kmeans.prototype = {
 
     if (this.generation == "random") {
       generator = function(obj) {
-        return {x: Math.random() * obj.canvas.width,
-                y: Math.random() * obj.canvas.height}
+        return {x: Math.random() * obj.drawing.getWidth(),
+                y: Math.random() * obj.drawing.getHeight()}
       }
     } else if (this.generation == "forgy") {
       generator = function(obj) {
@@ -89,12 +102,9 @@ window.Gorgon.Kmeans.prototype = {
       this.clusters[i] = generator.call(this, this);
     }
   },
-  clear: function() {
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-  },
   draw: function() {
     var kmeans = this, clusterCenter;
-    kmeans.clear();
+    kmeans.drawing.clear();
     if (kmeans.points) {
       $.each(kmeans.points, function(pointIdx) {
         kmeans.drawDataPoint(this);
@@ -112,7 +122,6 @@ window.Gorgon.Kmeans.prototype = {
         kmeans.drawClusterCenter(this);
       });
     }
-    // kmeans.drawExecutionMeanClusters();
   },
   getMeanValuePerExecution: function(key) {
     var sum = 0, count = 0, kmeans = this, value = null;
@@ -135,29 +144,6 @@ window.Gorgon.Kmeans.prototype = {
   getExecutionMeanDistanceBetweenPointsAndClusters: function() {
     return this.getMeanValuePerExecution('distance');
   },
-  // drawExecutionMeanClusters: function() {
-  //   var clusterLists = new Array(this.clusterCount), kmeans = this,
-  //     execution, cluster, clusterCenter;
-  //   if (kmeans.executions) {
-  //     $.each(kmeans.executions, function(i) {
-  //       execution = kmeans.executions[i];
-  //       if (execution && execution.clusters) {
-  //         $.each(execution.clusters, function(j) {
-  //           cluster = execution.clusters[j];
-  //           clusterLists[j] = clusterLists[j] || [];
-  //           clusterLists[j].push(cluster);
-  //         });
-  //       }
-  //     });
-
-  //     $.each(clusterLists, function(i) {
-  //       if (clusterLists[i]) {
-  //         clusterCenter = kmeans._centerPoint(clusterLists[i]);
-  //         kmeans.drawClusterMean(clusterCenter);
-  //       }
-  //     });
-  //   }
-  // },
   getIterationMeanDistanceBetweenPointsAndClusters: function() {
     var sum = 0, kmeans = this, point, cluster;
     $.each(kmeans.pointAssignments, function(index) {
