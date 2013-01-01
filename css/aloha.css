@@ -15,8 +15,8 @@ body {
 #left-column {
 	position: relative;
 	width: 612px;
-	height: 612px;
-	margin: 20px;
+	height: 572px;
+	margin: 20px 35px 20px 20px;
 	float: left;
 	padding: 20px 0;
 }
@@ -28,14 +28,20 @@ body {
 		left: 0;
 		right: 0;
 		background-color: #fff;
+		box-shadow:         3px 3px 10px 3px rgba(0,0,0,.6);
 	}
 
 #right-column {
 	position: relative;
-	height: 612px;
+	height: 572px;
 	float: left;
 	padding: 20px 0;
+	font-size: 18px;
 }
+
+	.right-photo {
+		margin-top: 20px;
+	}
 
 	.right-annotation {
 		position: absolute;
@@ -43,17 +49,21 @@ body {
 	}
 	
 	#photo-caption {
-		
+		color: #dedede;
+		margin-bottom: 20px;
 	}
 
 	#photo-user {
+		font-weight: bold;
 		
 	}
 	
 	#photo-timestamp {
-		
+		color: #777;
 	}
 	
 	#photo-likes {
-		
+		margin-top: 20px;
+		padding-left: 30px;
+		background: url(/img/aloha-like.gif) top left no-repeat;
 	}	
