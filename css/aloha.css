@@ -5,6 +5,7 @@ body {
 	padding: 0;
 	border: 0;
 	height: 100%;
+	font-family: Arial, Sans-Serif;
 }
 
 #aloha-container {
@@ -30,7 +31,29 @@ body {
 	}
 
 #right-column {
-	width: 50%;
+	position: relative;
+	height: 612px;
 	float: left;
 	padding: 20px 0;
 }
+
+	.right-annotation {
+		position: absolute;
+		bottom: 0;
+	}
+	
+	#photo-caption {
+		
+	}
+
+	#photo-user {
+		
+	}
+	
+	#photo-timestamp {
+		
+	}
+	
+	#photo-likes {
+		
+	}	
