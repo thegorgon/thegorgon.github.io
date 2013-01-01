@@ -6,7 +6,7 @@ var interval = setInterval(function() {
     url: url,
     success: function(response) {
       var username, imageUrl, likeCount, caption, timestamp, data, img;
-      data = response["data"] && response["data"][response["data"].length - 1];
+      data = response["data"] && response["data"][0];
       if (data && data["user"] && data["images"] && data["created_time"]) {
         timestamp = new Date(parseInt(data["created_time"], 10) * 1000);
         username = data["user"]["username"];
