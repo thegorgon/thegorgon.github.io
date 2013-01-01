@@ -15,7 +15,7 @@ body {
 #left-column {
 	position: relative;
 	width: 612px;
-	height: 612px;
+	height: 572px;
 	margin: 20px 35px 20px 20px;
 	float: left;
 	padding: 20px 0;
@@ -33,7 +33,7 @@ body {
 
 #right-column {
 	position: relative;
-	height: 612px;
+	height: 572px;
 	float: left;
 	padding: 20px 0;
 	font-size: 18px;
@@ -49,6 +49,7 @@ body {
 	}
 	
 	#photo-caption {
+		color: #dedede;
 		margin-bottom: 20px;
 	}
 
@@ -62,5 +63,7 @@ body {
 	}
 	
 	#photo-likes {
-		
+		margin-top: 20px;
+		padding-left: 30px;
+		background: url(/img/aloha-like.gif) top left no-repeat;
 	}	
