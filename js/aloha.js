@@ -33,7 +33,7 @@ var interval = setInterval(function() {
       $('#photo-container').html(img);
       $('#photo-caption').html(caption);
       $('#photo-user').html(username);
-      $('#photo-timestamp').html(timestamp);
+      $('#photo-timestamp').html($.timeago(timestamp));
       if (likeCount > 0) {
         $('#photo-likes').html(likeCount);
         $('#photo-likes').show();
