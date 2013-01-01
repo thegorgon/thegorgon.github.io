@@ -5,7 +5,7 @@ var interval = setInterval(function() {
     dataType: 'jsonp',
     url: url,
     success: function(response) {
-      var username, imageUrl, likeCount, caption, timestamp, data, img;
+      var username, imageUrl, likeCount, caption, timestamp, data, image, img;
       data = response["data"] && response["data"][0];
       if (data && data["user"] && data["images"] && data["created_time"]) {
         timestamp = new Date(parseInt(data["created_time"], 10) * 1000);
@@ -24,22 +24,26 @@ var interval = setInterval(function() {
       } else {
         console.log("Missing data in : ", data, data["user"], data["images"], data["created_time"]);
       }
-      img = $("<img>");
-      console.log("Image is now : ", imageUrl, " from ", username, " created ", timestamp, " caption ", caption);
-      img.attr('src', imageUrl);
-      img.attr('alt', caption);
-      img.attr('height', 612);
-      img.attr('width', 612);
-      $('#photo-container').html(img);
-      $('#photo-caption').html(caption);
-      $('#photo-user').html(username);
-      $('#photo-timestamp').html($.timeago(timestamp));
-      if (likeCount > 0) {
-        $('#photo-likes').html(likeCount);
-        $('#photo-likes').show();
-      } else {
-        $('#photo-likes').hide();
+      image = new Image();
+      image.onload = function() {
+        img = $("<img>");
+        console.log("Image is now : ", imageUrl, " from ", username, " created ", timestamp, " caption ", caption);
+        img.attr('src', imageUrl);
+        img.attr('alt', caption);
+        img.attr('height', 612);
+        img.attr('width', 612);
+        $('#photo-container').html(img);
+        $('#photo-caption').html(caption);
+        $('#photo-user').html(username);
+        $('#photo-timestamp').html($.timeago(timestamp));
+        if (likeCount > 0) {
+          $('#photo-likes').html(likeCount);
+          $('#photo-likes').show();
+        } else {
+          $('#photo-likes').hide();
+        }
       }
+      image.src = imageUrl;
     }
   })
 }, 1000);
