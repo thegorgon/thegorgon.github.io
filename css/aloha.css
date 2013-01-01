@@ -54,11 +54,16 @@ body {
 	}
 
 	#photo-user {
+		display: inline-block;
 		font-weight: bold;
-		
+		background-color: #3d3d3d;
+		padding: 8px 14px;
+		color: #fff;
+		border-radius: 4px;
 	}
 	
 	#photo-timestamp {
+		margin-top: 10px;
 		color: #777;
 	}
 	
@@ -66,4 +71,6 @@ body {
 		margin-top: 20px;
 		padding-left: 30px;
 		background: url(/img/aloha-like.gif) top left no-repeat;
+		font-weight: bold;
+		font-size: 100%;
 	}	
