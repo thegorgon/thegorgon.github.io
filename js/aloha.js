@@ -1,7 +1,7 @@
-var tag = "aloha2013"
-var clientId = "62649445f4b441ea8bd54a7f5a8a9307"
-var url = "https://api.instagram.com/v1/tags/" + tag + "/media/recent?limit=1&client_id=" + clientId;
-var interval = setInterval(function() {
+var tag = "aloha2013";
+var clientId = "8d0bdf74731f416f97185f60f7078ea3";
+var url = "https://api.instagram.com/v1/tags/" + tag + "/media/recent?client_id=" + clientId;
+var run = function() {
   $.ajax({
     dataType: 'jsonp',
     url: url,
@@ -47,4 +47,6 @@ var interval = setInterval(function() {
       image.src = imageUrl;
     }
   })
-}, 1000);
+};
+var interval = setInterval(run, 60000);
+run();
