@@ -1,5 +1,6 @@
+var tag = "aloha2013"
 var clientId = "62649445f4b441ea8bd54a7f5a8a9307"
-var url = "https://api.instagram.com/v1/tags/aloha2013/media/recent?limit=1&client_id=" + clientId;
+var url = "https://api.instagram.com/v1/tags/" + tag + "/media/recent?limit=1&client_id=" + clientId;
 var interval = setInterval(function() {
   $.ajax({
     dataType: 'jsonp',
