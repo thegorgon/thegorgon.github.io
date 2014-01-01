@@ -1,0 +1,9 @@
+safe: true
+lsi: false
+pygments: true
+permalink: pretty
+exclude:
+  - CNAME
+  - Gemfile
+  - Gemfile.lock
+  - README.md

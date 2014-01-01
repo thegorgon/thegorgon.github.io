@@ -1,0 +1,96 @@
+<html>
+  <head>
+    <title>the gorgon lab - kmeans demonstration</title>
+    <link rel="stylesheet" type="text/css" href="/css/chosen.css" />
+    <link rel="stylesheet" type="text/css" href="/css/styles.css" />
+    <script type="text/javascript" src="/js/jquery.js"></script>
+    <script type="text/javascript" src="/js/application.js"></script>
+    <script type="text/javascript" src="/js/kmeans.js"></script>
+  </head>
+  <body>
+    <div id="bg">
+      <div class="stretcher" data-gravity="0.5x0.5" style="width: 1023px; height: 448px;">
+        <img src="/assets/backgrounds/elephants.jpg" style="width: 1024px; height: 768px; top: -160px; left: 0px; opacity: 1;">
+      </div>
+    </div>
+    <div class="clearfix" id="page">
+      <div id="bd" class="fullscreen">
+        <div id="wrapper" class="demo">
+          <h1>the gorgon lab - kmeans demonstration</h1>
+          <canvas id="kmeans-demo" width="900" height="400"></canvas>
+          <form id="kmeans-controls" class="demo-controls">
+            <label for="point-count">Point Count :</label>
+            <input type="number" id="point-count" name="point-count" value="1000" />
+            <label for="point-count">Cluster Count :</label>
+            <input type="number" id="cluster-count" name="cluster-count" value="5" />
+            <label for="execution-count">Execution Count :</label>
+            <input type="number" id="execution-count" name="execution-count" value="10" />
+            <select id="point-generation" name="point-generation">
+              <option value="random">Random Partition</option>
+              <option value="forgy">Forgy Partition</option>
+            </select>
+            <button id="execute" name="execute">
+              execute
+            </button>
+            <button id="generate" name="generate">
+              generate points
+            </button>
+            <div class="demo-logging">
+              <div id="iteration-log"></div>
+              <div id="execution-log"></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+      $(document).ready(function(e) {
+        $.stretcher.init();
+        $("select").chosen();
+        var canvas = $('#kmeans-demo')[0];
+        var drawing = new Gorgon.Drawing(canvas);
+        var kmeans = new Gorgon.Kmeans(drawing);
+        drawing.drawText("Set Parameters and Press Execute to Begin");
+        var setup = function() {
+          $('#execution-log').html('');
+          kmeans.setPointCount($('#point-count').val());
+          kmeans.setClusterCount($('#cluster-count').val());
+          kmeans.setClusterGeneration($('#point-generation').val());
+          kmeans.setIterationInterval(Math.min(100.0, 10000.0/$('#execution-count').val()));
+        };
+        var generate = function() {
+          setup();
+          kmeans.randomizePoints();
+          kmeans.draw();
+        };
+        var execute = function() {
+          setup();
+          kmeans.execute($('#execution-count').val(),
+            function(finished) {
+              var average = this.getMeanIterationsPerExecution();
+
+              if (finished) {
+                $('#iteration-log').html('<p>Finished Execution: <strong>' + this.getExecutionHumanIndex() + '</strong>, Iterations: <strong>' + this.getIterationIndex() + '</strong></p>');
+              } else {
+                $('#iteration-log').html('<p>Iteration: <strong>' + this.getIterationIndex() +'</strong> of execution <strong>' + this.getExecutionHumanIndex() + '</strong>. Mean iteration distance : <strong>' + this.getIterationMeanDistanceBetweenPointsAndClusters().toFixed(3) + '</strong></p>');
+              }
+              $('#execution-log').html("<p>Iterations per execution: <strong>" + average.toFixed(3) + "</strong>, Executions: <strong>" + this.getExecutionHumanIndex() + "</strong>. Mean distance : <strong>" + this.getExecutionMeanDistanceBetweenPointsAndClusters().toFixed(3) + "</strong></p>");
+          });
+        };
+        $("#execute").click(function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          execute();
+          return false;
+        });
+
+        $("#generate").click(function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          generate();
+          return false;
+        });
+      });
+    </script>
+  </body>
+</html>
