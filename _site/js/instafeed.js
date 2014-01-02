@@ -101,28 +101,9 @@ var updateData = function(options) {
   })
 };
 
-var countdown = function() {
-  var string;
-  var midnight = new Date('2014-01-01 00:00:00 PST');
-  var now = new Date();
-  var millisecondsLeft = midnight - now;
-  var msPerSecond = 1000;
-  var msPerMinute = 60 * msPerSecond;
-  var msPerHour = 60 * msPerMinute;
-  var hoursLeft = Math.floor(millisecondsLeft/msPerHour);
-  var minutesLeft = Math.floor((millisecondsLeft - (hoursLeft * msPerHour))/msPerMinute);
-  var secondsLeft = Math.floor((millisecondsLeft - (hoursLeft * msPerHour) - (minutesLeft * msPerMinute))/msPerSecond);
-  if (millisecondsLeft < 0) {
-    $('#countdown').text('Happy New Year!');
-  } else {
-    $('#countdown-counter').html(hoursLeft.pad(2) + ':' + minutesLeft.pad(2) + ':' + secondsLeft.pad(2));
-  }
-};
-
 $(document).ready(function() {
   $('#title').text('#' + tag);
   var updateInterval = setInterval(updateData, 60000);
   var renderInterval = setInterval(render, 5000);
-  var countdownInterval = setInterval(countdown, 100);
   updateData({ render: true });
 });
