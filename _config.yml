@@ -1,9 +1,22 @@
-safe: true
-lsi: false
-pygments: true
+title: The Gorgon Lab
+email: thegorgonlab@gmail.com
+description: > # this means to ignore newlines until "baseurl:"
+  the gorgon lab - a modern mad scientists laboratory - the rantings and ravings of jesse reiss.
+baseurl: "/" # the subpath of your site, e.g. /blog
+url: "http://thegorgon.github.io" # the base hostname & protocol for your site
+twitter_username: jessereiss
+github_username: thegorgon
+
+# Build settings
+markdown: kramdown
+source: src
+destination: public
 permalink: pretty
 exclude:
+  - node_modules
   - CNAME
   - Gemfile
   - Gemfile.lock
   - README.md
+  - assets/css
+  - assets/javascripts

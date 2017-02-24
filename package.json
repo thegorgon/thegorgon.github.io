@@ -1,0 +1,51 @@
+{
+  "name": "thegorgonlab",
+  "version": "1.0.0",
+  "description": "Event Software for Organizers",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "webpack": "rm -rf assets/bundles && webpack --config=webpack.config.js",
+    "webpack:watch": "rm -rf src/assets/bundles && webpack --config=webpack.config.js --watch",
+    "webpack:deploy": "rm -rf assets/dist && NODE_ENV=production webpack --config=webpack.config.js --progress -p"
+  },
+  "author": "Jesse Reiss <jessereiss@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.22.2",
+    "babel-core": "^6.22.1",
+    "babel-loader": "^6.2.10",
+    "babel-preset-env": "^1.1.8",
+    "babel-preset-react": "^6.22.0",
+    "css-loader": "^0.26.1",
+    "extract-text-webpack-plugin": "^2.0.0-beta",
+    "file-loader": "^0.10.0",
+    "image-webpack-loader": "^3.2.0",
+    "jquery": "^3.1.1",
+    "materialize-css": "^0.98.0",
+    "node-sass": "^4.5.0",
+    "optimize-css-assets-webpack-plugin": "^1.3.0",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "resolve-url-loader": "^1.6.1",
+    "sass-loader": "^4.1.1",
+    "style-loader": "^0.13.1",
+    "url-loader": "^0.5.7",
+    "webpack": "^2.2.1",
+    "webpack-bundle-tracker": "^0.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:thegorgon/thegorgon.github.com.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thegorgon/thegorgon.github.com/issues"
+  },
+  "homepage": "http://thegorgon.github.io/",
+  "babel": {
+    "presets": [
+      "env",
+      "react"
+    ]
+  }
+}
