@@ -16,8 +16,8 @@
     <div class="container">
       <header class="row">
         <h1>the gorgon lab</h1>
-        <h3>a modern mad scientists laboratory</h3>
-        <h5>the rantings, ravings and machinations of jesse reiss</h5>
+        {% if page.title %}<h3>{{ page.title }}</h3>{% endif %}
+        {% if page.subtitle %}<h5>{{ page.subtitle }}</h5>{% endif %}
       </header>
       {{ content }}
     </div>

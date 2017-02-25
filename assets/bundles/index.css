@@ -11017,6 +11017,10 @@ button.picker__close:focus {
   padding: 0.5rem 0.5rem;
 }
 
+.home .projects .description {
+  height: auto;
+}
+
 .home .projects a.card {
   box-shadow: none;
   border: 1px solid #eee;
@@ -11031,10 +11035,106 @@ button.picker__close:focus {
   color: #ccc !important;
 }
 
+@-webkit-keyframes blink {
+  0% {
+    opacity: 1;
+  }
+
+  49% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@-moz-keyframes blink {
+  0% {
+    opacity: 1;
+  }
+
+  49% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@-o-keyframes blink {
+  0% {
+    opacity: 1;
+  }
+
+  49% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+
+  49% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.clock .digital {
+  font-family: Courier New, monospace;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.clock .digital .divider {
+  background: #fff;
+  -webkit-animation: blink 2s infinite;
+  -moz-animation: blink 2s infinite;
+  -o-animation: blink 2s infinite;
+  animation: blink 2s infinite;
+}
+
+.clock canvas {
+  margin: 0 auto;
+  text-align: center;
+  display: block;
+}
+
 @media only screen and (min-width: 992px) {
   .home .projects .card-content {
     padding: 1rem;
     text-align: left;
+  }
+
+  .home .projects .description {
+    height: 3rem;
   }
 }
 
