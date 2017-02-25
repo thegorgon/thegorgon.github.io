@@ -1,5 +1,6 @@
 .sass-cache
 .jekyll-metadata
-public
+_site
 node_modules
 src/assets/bundles
+npm-debug.log

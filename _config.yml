@@ -10,7 +10,7 @@ github_username: thegorgon
 # Build settings
 markdown: kramdown
 source: src
-destination: public
+destination: _site
 permalink: pretty
 exclude:
   - node_modules
