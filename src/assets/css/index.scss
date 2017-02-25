@@ -1,0 +1,17 @@
+@import '~materialize-css/sass/components/color';
+@import '~materialize-css/sass/components/variables';
+
+$primary-color: color("light-blue", "lighten-2") !default;
+$primary-color-light: lighten($primary-color, 15%) !default;
+$primary-color-dark: darken($primary-color, 15%) !default;
+
+$secondary-color: color("light-blue", "base") !default;
+$success-color: color("light-blue", "base") !default;
+$error-color: color("red", "lighten-1") !default;
+$link-color: color("light-blue", "lighten-2") !default;
+
+$button-background-focus: lighten($primary-color, 4%) !default;
+$button-raised-background: $primary-color !default;
+$chip-selected-color: $secondary-color !default;
+
+@import '~materialize-css/sass/materialize';
