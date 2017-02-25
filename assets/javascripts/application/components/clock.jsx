@@ -17,7 +17,8 @@ class Clock extends React.Component {
     super(props);
 
     this.state = {
-      time: new Date()
+      time: new Date(),
+      smooth: false
     };
   }
 
@@ -40,7 +41,7 @@ class Clock extends React.Component {
     var ctx = canvas.getContext('2d');
     var width = canvas.width;
     var height = canvas.height;
-    var r, r1, r2, theta, x, y;
+    var r, r1, r2, theta, x, y, seconds, minutes, hours;
     ctx.clearRect(0, 0, width, height);
 
     ctx.beginPath();
@@ -61,7 +62,11 @@ class Clock extends React.Component {
 
     // second hand
     r = width * 0.22;
-    theta = (this.state.time.getSeconds() + this.state.time.getMilliseconds() * 0.001) * (2 * Math.PI)/60.0 - Math.PI/2.0;
+    seconds = this.state.time.getSeconds();
+    if (this.state.smooth) {
+      seconds += this.state.time.getMilliseconds() * 0.001;
+    }
+    theta = seconds * (2 * Math.PI)/60.0 - Math.PI/2.0;
     x = r * Math.cos(theta) + width * 0.5;
     y = r * Math.sin(theta) + height * 0.5;
     ctx.beginPath();
@@ -72,7 +77,11 @@ class Clock extends React.Component {
 
     // minute hand
     r = width * 0.20;
-    theta = this.state.time.getMinutes() * (2 * Math.PI)/60.0 - Math.PI/2.0;
+    minutes = this.state.time.getMinutes();
+    if (this.state.smooth) {
+      minutes += seconds/60.0;
+    }
+    theta = minutes * (2 * Math.PI)/60.0 - Math.PI/2.0;
     x = r * Math.cos(theta) + width * 0.5;
     y = r * Math.sin(theta) + height * 0.5;
     ctx.beginPath();
@@ -83,7 +92,11 @@ class Clock extends React.Component {
 
     // hour hand
     r = width * 0.125;
-    theta = (this.state.time.getHours() % 12) * (2 * Math.PI)/12.0 - Math.PI/2.0;
+    hours = this.state.time.getHours();
+    if (this.state.smooth) {
+      hours += minutes/60.0;
+    }
+    theta = (hours % 12) * (2 * Math.PI)/12.0 - Math.PI/2.0;
     x = r * Math.cos(theta) + width * 0.5;
     y = r * Math.sin(theta) + height * 0.5;
     ctx.beginPath();
@@ -91,6 +104,14 @@ class Clock extends React.Component {
     ctx.moveTo(width * 0.5, height * 0.5);
     ctx.lineTo(x, y);
     ctx.stroke();
+  }
+
+  toggleSmooth() {
+    this.setState((prevState) => {
+      return {
+        smooth: !prevState.smooth
+      };
+    });
   }
 
   render() {
@@ -104,6 +125,12 @@ class Clock extends React.Component {
           <span className="seconds">{this.state.time.getSeconds().lpad(2)}</span>
         </div>
         <canvas className="col s8 offset-s2" height="500" width="809" ref="canvas"></canvas>
+        <div className="controls col s2 offset-s5">
+          <div className={"btn-flat waves-effect " + (this.state.smooth ? "active" : "inactive")}
+              onClick={this.toggleSmooth.bind(this)}>
+              Smooth
+          </div>
+        </div>
       </div>
     );
   }

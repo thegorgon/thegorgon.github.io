@@ -10998,7 +10998,7 @@ button.picker__close:focus {
   }
 }
 
-.home .links .btn-flat {
+.btn-flat {
   border: 1px solid #eee;
   background-color: white;
   color: black;
@@ -11006,9 +11006,14 @@ button.picker__close:focus {
   transition: border-color 0.25s, color 0.25s;
 }
 
-.home .links .btn-flat:hover {
-  border-color: #ccc;
-  color: #ccc !important;
+.btn-flat:hover {
+  border-color: #ddd;
+  color: #666 !important;
+  background-color: #ddd;
+}
+
+.btn-flat.active {
+  background-color: #ccc;
 }
 
 .home .projects .card-content {

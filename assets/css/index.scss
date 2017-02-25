@@ -17,20 +17,23 @@ $chip-selected-color: $secondary-color !default;
 
 @import '~materialize-css/sass/materialize';
 
-.home {
-  .links {
-    .btn-flat {
-      border: 1px solid #eee;
-      background-color: white;
-      color: black;
-      text-transform: lowercase;
-      transition: border-color 0.25s, color 0.25s;
-      &:hover {
-        border-color: #ccc;
-        color: #ccc !important;
-      }
-    }
+.btn-flat {
+  border: 1px solid #eee;
+  background-color: white;
+  color: black;
+  text-transform: lowercase;
+  transition: border-color 0.25s, color 0.25s;
+  &:hover {
+    border-color: #ddd;
+    color: #666 !important;
+    background-color: #ddd;
   }
+  &.active {
+    background-color: #ccc;
+  }
+}
+
+.home {
   .projects {
     .card-content {
       display: block;
