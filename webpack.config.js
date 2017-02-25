@@ -8,7 +8,7 @@ var nodeEnv = process.env.NODE_ENV;
 var bundleTrackerFilename = './webpack-stats.json';
 
 var config = {
-  context: __dirname + '/src/assets',
+  context: __dirname + '/assets',
 
   devtool: "source-map",
 
@@ -17,7 +17,7 @@ var config = {
   },
 
   output: {
-    path: path.resolve('./src/assets/bundles/'),
+    path: path.resolve('./assets/bundles/'),
     filename: "[name].js",
   },
 
