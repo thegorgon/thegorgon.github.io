@@ -23,11 +23,41 @@ $chip-selected-color: $secondary-color !default;
       background-color: white;
       color: black;
       text-transform: lowercase;
+      transition: border-color 0.25s, color 0.25s;
       &:hover {
         border-color: #ccc;
-        transition: border-color 0.5s, background-color 0.5s;
-        background-color: #eee;
+        color: #ccc !important;
       }
     }
   }
+  .projects {
+    .card-content {
+      display: block;
+      text-align: center;
+      padding: 0.5rem 0.5rem;
+    }
+    a.card {
+      box-shadow: none;
+      border: 1px solid #eee;
+      color: black;
+      display: block;
+      margin-right: 0.5rem;
+      transition: border-color 0.25s, color 0.25s;
+      &:hover {
+        border-color: #ccc;
+        color: #ccc !important;
+      }
+    }
+  }
+}
+
+@media only screen and (min-width: 992px) {
+ .home {
+    .projects {
+      .card-content {
+        padding: 1rem;
+        text-align: left;
+      }
+    }
+ }
 }
