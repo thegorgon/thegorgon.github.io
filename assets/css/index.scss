@@ -15,3 +15,19 @@ $button-raised-background: $primary-color !default;
 $chip-selected-color: $secondary-color !default;
 
 @import '~materialize-css/sass/materialize';
+
+.home {
+  .links {
+    .btn-flat {
+      border: 1px solid #eee;
+      background-color: white;
+      color: black;
+      text-transform: lowercase;
+      &:hover {
+        border-color: #ccc;
+        transition: border-color 0.5s, background-color 0.5s;
+        background-color: #eee;
+      }
+    }
+  }
+}

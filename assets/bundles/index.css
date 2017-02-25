@@ -10998,5 +10998,18 @@ button.picker__close:focus {
   }
 }
 
+.home .links .btn-flat {
+  border: 1px solid #eee;
+  background-color: white;
+  color: black;
+  text-transform: lowercase;
+}
+
+.home .links .btn-flat:hover {
+  border-color: #ccc;
+  transition: border-color 0.5s, background-color 0.5s;
+  background-color: #eee;
+}
+
 
 /*# sourceMappingURL=index.css.map*/
