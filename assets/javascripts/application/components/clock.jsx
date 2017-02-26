@@ -1,5 +1,6 @@
 var React = require('react');
 var $ = require('jquery');
+var Drawing = require('../drawing')
 
 String.prototype.lpad = function(length){
   var accum = this;
@@ -49,15 +50,22 @@ class Clock extends React.Component {
     ctx.arc(width * 0.5, height * 0.5, width * 0.25, 0, 2*Math.PI);
     ctx.stroke();
 
+    var start, finish;
     for (var i = 0; i < 12; i++) {
       r1 = width * 0.20;
       r2 = width * 0.23;
       theta = i * (2 * Math.PI)/12.0 - Math.PI/2.0;
-      ctx.beginPath();
-      ctx.fillStyle = '#333';
-      ctx.moveTo(r1 * Math.cos(theta) + width * 0.5, r1 * Math.sin(theta) + height * 0.5);
-      ctx.lineTo(r2 * Math.cos(theta) + width * 0.5, r2 * Math.sin(theta) + height * 0.5);
-      ctx.stroke();
+      Drawing.line(ctx, {
+        fill: '#333',
+        start: {
+          x: r1 * Math.cos(theta) + width * 0.5,
+          y: r1 * Math.sin(theta) + height * 0.5
+        },
+        finish: {
+          x: r2 * Math.cos(theta) + width * 0.5,
+          y: r2 * Math.sin(theta) + height * 0.5
+        }
+      });
     }
 
     // second hand
@@ -66,44 +74,51 @@ class Clock extends React.Component {
     if (this.state.smooth) {
       seconds += this.state.time.getMilliseconds() * 0.001;
     }
+
     theta = seconds * (2 * Math.PI)/60.0 - Math.PI/2.0;
-    x = r * Math.cos(theta) + width * 0.5;
-    y = r * Math.sin(theta) + height * 0.5;
-    ctx.beginPath();
-    ctx.fillStyle = '#333';
-    ctx.moveTo(width * 0.5, height * 0.5);
-    ctx.lineTo(x, y);
-    ctx.stroke();
+    Drawing.line(ctx, {
+      fill: '#333',
+      start: {
+        x: width * 0.5,
+        y: height * 0.5
+      },
+      finish: {
+        x: r * Math.cos(theta) + width * 0.5,
+        y: r * Math.sin(theta) + height * 0.5
+      }
+    });
 
     // minute hand
     r = width * 0.20;
-    minutes = this.state.time.getMinutes();
-    if (this.state.smooth) {
-      minutes += seconds/60.0;
-    }
+    minutes = this.state.time.getMinutes() + seconds/60.0;
     theta = minutes * (2 * Math.PI)/60.0 - Math.PI/2.0;
-    x = r * Math.cos(theta) + width * 0.5;
-    y = r * Math.sin(theta) + height * 0.5;
-    ctx.beginPath();
-    ctx.fillStyle = '#333';
-    ctx.moveTo(width * 0.5, height * 0.5);
-    ctx.lineTo(x, y);
-    ctx.stroke();
+    Drawing.line(ctx, {
+      fill: '#333',
+      start: {
+        x: width * 0.5,
+        y: height * 0.5
+      },
+      finish: {
+        x: r * Math.cos(theta) + width * 0.5,
+        y: r * Math.sin(theta) + height * 0.5
+      }
+    });
 
     // hour hand
     r = width * 0.125;
-    hours = this.state.time.getHours();
-    if (this.state.smooth) {
-      hours += minutes/60.0;
-    }
+    hours = this.state.time.getHours() + minutes/60.0;
     theta = (hours % 12) * (2 * Math.PI)/12.0 - Math.PI/2.0;
-    x = r * Math.cos(theta) + width * 0.5;
-    y = r * Math.sin(theta) + height * 0.5;
-    ctx.beginPath();
-    ctx.fillStyle = '#333';
-    ctx.moveTo(width * 0.5, height * 0.5);
-    ctx.lineTo(x, y);
-    ctx.stroke();
+    Drawing.line(ctx, {
+      fill: '#333',
+      start: {
+        x: width * 0.5,
+        y: height * 0.5
+      },
+      finish: {
+        x: r * Math.cos(theta) + width * 0.5,
+        y: r * Math.sin(theta) + height * 0.5
+      }
+    });
   }
 
   toggleSmooth() {
