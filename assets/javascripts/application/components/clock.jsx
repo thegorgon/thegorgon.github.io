@@ -19,8 +19,8 @@ class Clock extends React.Component {
 
     this.state = {
       time: new Date(),
-      movement: 'mechanical',
-      style: 'retro'
+      movement: 'quartz',
+      style: 'basic'
     };
   }
 
