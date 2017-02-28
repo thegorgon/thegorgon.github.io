@@ -8,7 +8,7 @@
     <title>{% if page.title %}{{ page.title | escape }}{% else %}{{ site.title | escape }}{% endif %}</title>
     <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
 
-    <link rel="stylesheet" href="{{ "assets/bundles/index.css" | prepend: site.baseurl }}">
+    <link rel="stylesheet" href="{{ 'assets/bundles/index.css' | prepend: site.baseurl }}?{{site.time | date: '%s%N'}}">
     <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
     <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "feed.xml" | prepend: site.baseurl | prepend: site.url }}">
   </head>
@@ -21,6 +21,6 @@
       </header>
       {{ content }}
     </div>
-    <script type="text/javascript" src="/assets/bundles/index.js" charset="utf-8"></script>
+    <script type="text/javascript" src="{{ 'assets/bundles/index.js' | prepend: site.baseurl }}?{{site.time | date: '%s%N'}}" charset="utf-8"></script>
   </body>
 </html>
