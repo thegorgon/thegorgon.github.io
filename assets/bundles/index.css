@@ -11016,6 +11016,16 @@ button.picker__close:focus {
   background-color: #ccc;
 }
 
+.toggle .title {
+  margin: 0 auto 0.5rem;
+  text-align: center;
+}
+
+.toggle .btn-flat {
+  text-align: center;
+  margin: 0;
+}
+
 .home .projects .card-content {
   display: block;
   text-align: center;

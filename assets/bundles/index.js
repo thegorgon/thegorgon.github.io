@@ -37636,7 +37636,8 @@ var Clock = function (_React$Component) {
 
     _this.state = {
       time: new Date(),
-      smooth: false
+      movement: 'mechanical',
+      style: 'retro'
     };
     return _this;
   }
@@ -37663,95 +37664,348 @@ var Clock = function (_React$Component) {
     key: 'componentDidUpdate',
     value: function componentDidUpdate(prevProps, prevState) {
       var canvas = this.refs.canvas;
-      var ctx = canvas.getContext('2d');
-      var width = canvas.width;
-      var height = canvas.height;
-      var r, r1, r2, theta, x, y, seconds, minutes, hours;
-      ctx.clearRect(0, 0, width, height);
+      var seconds = this.state.time.getSeconds();
+      if (this.state.movement == 'mechanical') {
+        seconds += this.state.time.getMilliseconds() * 0.001;
+      }
+      var minutes = this.state.time.getMinutes() + seconds / 60.0;
+      var hours = this.state.time.getHours() + minutes / 60.0;
+      var data = {
+        ctx: canvas.getContext('2d'),
+        width: canvas.width,
+        height: canvas.height,
+        hours: hours,
+        minutes: minutes,
+        seconds: seconds
+      };
+      data.ctx.clearRect(0, 0, data.width, data.height);
 
-      ctx.beginPath();
-      ctx.fillStyle = '#333';
-      ctx.arc(width * 0.5, height * 0.5, width * 0.25, 0, 2 * Math.PI);
-      ctx.stroke();
+      switch (this.state.style) {
+        case 'basic':
+          this.renderBasicClock(data);break;
+        case 'retro':
+          this.renderRetroClock(data);break;
+        case 'movado':
+          this.renderMovadoClock(data);break;
+        case 'classic':
+          this.renderClassicClock(data);break;
+        default:
+          console.log('ERROR: INVALID STYLE ', this.state.style);
+      }
+    }
+  }, {
+    key: 'renderBasicClock',
+    value: function renderBasicClock(data) {
+      var r, r1, r2, theta, x, y;
+      Drawing.ring(data.ctx, {
+        center: {
+          x: data.width * 0.5,
+          y: data.height * 0.5
+        },
+        radius: data.width * 0.25
+      });
 
-      var start, finish;
       for (var i = 0; i < 12; i++) {
-        r1 = width * 0.20;
-        r2 = width * 0.23;
+        r1 = data.width * 0.20;
+        r2 = data.width * 0.23;
         theta = i * (2 * Math.PI) / 12.0 - Math.PI / 2.0;
-        Drawing.line(ctx, {
-          fill: '#333',
+        Drawing.line(data.ctx, {
           start: {
-            x: r1 * Math.cos(theta) + width * 0.5,
-            y: r1 * Math.sin(theta) + height * 0.5
+            x: r1 * Math.cos(theta) + data.width * 0.5,
+            y: r1 * Math.sin(theta) + data.height * 0.5
           },
           finish: {
-            x: r2 * Math.cos(theta) + width * 0.5,
-            y: r2 * Math.sin(theta) + height * 0.5
+            x: r2 * Math.cos(theta) + data.width * 0.5,
+            y: r2 * Math.sin(theta) + data.height * 0.5
           }
         });
       }
 
       // second hand
-      r = width * 0.22;
-      seconds = this.state.time.getSeconds();
-      if (this.state.smooth) {
-        seconds += this.state.time.getMilliseconds() * 0.001;
-      }
-
-      theta = seconds * (2 * Math.PI) / 60.0 - Math.PI / 2.0;
-      Drawing.line(ctx, {
-        fill: '#333',
+      r = data.width * 0.22;
+      theta = data.seconds * (2 * Math.PI) / 60.0 - Math.PI / 2.0;
+      Drawing.line(data.ctx, {
         start: {
-          x: width * 0.5,
-          y: height * 0.5
+          x: data.width * 0.5,
+          y: data.height * 0.5
         },
         finish: {
-          x: r * Math.cos(theta) + width * 0.5,
-          y: r * Math.sin(theta) + height * 0.5
+          x: r * Math.cos(theta) + data.width * 0.5,
+          y: r * Math.sin(theta) + data.height * 0.5
         }
       });
 
       // minute hand
-      r = width * 0.20;
-      minutes = this.state.time.getMinutes() + seconds / 60.0;
-      theta = minutes * (2 * Math.PI) / 60.0 - Math.PI / 2.0;
-      Drawing.line(ctx, {
-        fill: '#333',
+      r = data.width * 0.20;
+      theta = data.minutes * (2 * Math.PI) / 60.0 - Math.PI / 2.0;
+      Drawing.line(data.ctx, {
         start: {
-          x: width * 0.5,
-          y: height * 0.5
+          x: data.width * 0.5,
+          y: data.height * 0.5
         },
         finish: {
-          x: r * Math.cos(theta) + width * 0.5,
-          y: r * Math.sin(theta) + height * 0.5
+          x: r * Math.cos(theta) + data.width * 0.5,
+          y: r * Math.sin(theta) + data.height * 0.5
         }
       });
 
       // hour hand
-      r = width * 0.125;
-      hours = this.state.time.getHours() + minutes / 60.0;
-      theta = hours % 12 * (2 * Math.PI) / 12.0 - Math.PI / 2.0;
-      Drawing.line(ctx, {
-        fill: '#333',
+      r = data.width * 0.125;
+      theta = data.hours % 12 * (2 * Math.PI) / 12.0 - Math.PI / 2.0;
+      Drawing.line(data.ctx, {
         start: {
-          x: width * 0.5,
-          y: height * 0.5
+          x: data.width * 0.5,
+          y: data.height * 0.5
         },
         finish: {
-          x: r * Math.cos(theta) + width * 0.5,
-          y: r * Math.sin(theta) + height * 0.5
+          x: r * Math.cos(theta) + data.width * 0.5,
+          y: r * Math.sin(theta) + data.height * 0.5
         }
       });
     }
   }, {
-    key: 'toggleSmooth',
-    value: function toggleSmooth() {
-      this.setState(function (prevState) {
-        return {
-          smooth: !prevState.smooth
-        };
+    key: 'renderRetroClock',
+    value: function renderRetroClock(data) {
+      var r, theta, x, y;
+      Drawing.ring(data.ctx, {
+        stroke: {
+          style: '#fff',
+          width: 10
+        },
+        shadow: {
+          color: '#333',
+          blur: 2,
+          offset: {
+            x: 1,
+            y: 1
+          }
+        },
+        center: {
+          x: data.width * 0.5,
+          y: data.height * 0.5
+        },
+        radius: data.width * 0.25
       });
+
+      Drawing.disc(data.ctx, {
+        fill: {
+          style: '#00f'
+        },
+        center: {
+          x: data.width * 0.42,
+          y: data.height * 0.77
+        },
+        radius: 12
+      });
+
+      Drawing.line(data.ctx, {
+        stroke: {
+          style: '#444',
+          width: 20
+        },
+        start: {
+          x: data.width * 0.55,
+          y: data.height * 0.52
+        },
+        finish: {
+          x: data.width * 0.575,
+          y: data.height * 0.53
+        }
+      });
+
+      Drawing.line(data.ctx, {
+        stroke: {
+          style: '#f00',
+          width: 13
+        },
+        start: {
+          x: data.width * 0.37,
+          y: data.height * 0.63
+        },
+        finish: {
+          x: data.width * 0.52,
+          y: data.height * 0.74
+        }
+      });
+
+      Drawing.line(data.ctx, {
+        stroke: {
+          style: '#00f',
+          width: 7
+        },
+        start: {
+          x: data.width * 0.3,
+          y: data.height * 0.53
+        },
+        finish: {
+          x: data.width * 0.5,
+          y: data.height * 0.675
+        }
+      });
+
+      Drawing.line(data.ctx, {
+        stroke: {
+          style: '#ffdf00',
+          width: 15
+        },
+        start: {
+          x: data.width * 0.43,
+          y: data.height * 0.59
+        },
+        finish: {
+          x: data.width * 0.39,
+          y: data.height * 0.73
+        }
+      });
+
+      Drawing.line(data.ctx, {
+        stroke: {
+          style: '#f00',
+          width: 7
+        },
+        start: {
+          x: data.width * 0.48,
+          y: data.height * 0.15
+        },
+        finish: {
+          x: data.width * 0.52,
+          y: data.height * 0.3
+        }
+      });
+
+      [{ x: 0.64, y: 0.70 }, { x: 0.647, y: 0.75 }, { x: 0.67, y: 0.72 }].map(function (center) {
+        Drawing.disc(data.ctx, {
+          fill: {
+            style: '#333'
+          },
+          radius: 7,
+          center: {
+            x: center.x * data.width,
+            y: center.y * data.height
+          }
+        });
+      });
+
+      // hour hand
+      r = data.width * 0.13;
+      theta = data.hours % 12 * (2 * Math.PI) / 12.0 - Math.PI / 2.0;
+      Drawing.line(data.ctx, {
+        stroke: {
+          style: '#ffdf00',
+          width: 12
+        },
+        start: {
+          x: data.width * 0.5 - 0.1 * r * Math.cos(theta),
+          y: data.height * 0.5 - 0.1 * r * Math.sin(theta)
+        },
+        finish: {
+          x: r * Math.cos(theta) + data.width * 0.5,
+          y: r * Math.sin(theta) + data.height * 0.5
+        },
+        shadow: {
+          color: 'rgba(0, 0, 0, 0.5)',
+          blur: 2,
+          offset: {
+            x: 2,
+            y: 2
+          }
+        }
+      });
+
+      // minute hand
+      r = data.width * 0.20;
+      theta = data.minutes * (2 * Math.PI) / 60.0 - Math.PI / 2.0;
+      Drawing.line(data.ctx, {
+        stroke: {
+          style: '#f00',
+          width: 8
+        },
+        start: {
+          x: data.width * 0.5 - 0.1 * r * Math.cos(theta),
+          y: data.height * 0.5 - 0.1 * r * Math.sin(theta)
+        },
+        finish: {
+          x: r * Math.cos(theta) + data.width * 0.5,
+          y: r * Math.sin(theta) + data.height * 0.5
+        },
+        shadow: {
+          color: 'rgba(0, 0, 0, 0.5)',
+          blur: 4,
+          offset: {
+            x: 4,
+            y: 4
+          }
+        }
+      });
+
+      // second hand
+      r = data.width * 0.22;
+      theta = data.seconds * (2 * Math.PI) / 60.0 - Math.PI / 2.0;
+      Drawing.line(data.ctx, {
+        stroke: {
+          style: '#00f',
+          width: 4
+        },
+        start: {
+          x: data.width * 0.5 - 0.1 * r * Math.cos(theta),
+          y: data.height * 0.5 - 0.1 * r * Math.sin(theta)
+        },
+        finish: {
+          x: r * Math.cos(theta) + data.width * 0.5,
+          y: r * Math.sin(theta) + data.height * 0.5
+        },
+        shadow: {
+          color: 'rgba(0, 0, 0, 0.5)',
+          blur: 6,
+          offset: {
+            x: 5,
+            y: 5
+          }
+        }
+      });
+
+      Drawing.circle(data.ctx, {
+        fill: {
+          style: '#eee'
+        },
+        stroke: {
+          style: '#333',
+          width: 2
+        },
+        center: {
+          x: data.width * 0.5,
+          y: data.height * 0.5
+        },
+        radius: 6
+      });
+    }
+  }, {
+    key: 'renderMovadoClock',
+    value: function renderMovadoClock(data) {}
+  }, {
+    key: 'renderClassicClock',
+    value: function renderClassicClock(data) {}
+  }, {
+    key: 'setMovementHandler',
+    value: function setMovementHandler(movement) {
+      var _this3 = this;
+
+      return function () {
+        _this3.setState({
+          movement: movement
+        });
+      }.bind(this);
+    }
+  }, {
+    key: 'setStyleHandler',
+    value: function setStyleHandler(style) {
+      var _this4 = this;
+
+      return function () {
+        _this4.setState({
+          style: style
+        });
+      }.bind(this);
     }
   }, {
     key: 'render',
@@ -37791,12 +38045,48 @@ var Clock = function (_React$Component) {
         React.createElement('canvas', { className: 'col s8 offset-s2', height: '500', width: '809', ref: 'canvas' }),
         React.createElement(
           'div',
-          { className: 'controls col s2 offset-s5' },
+          { className: 'controls col s12' },
           React.createElement(
             'div',
-            { className: "btn-flat waves-effect " + (this.state.smooth ? "active" : "inactive"),
-              onClick: this.toggleSmooth.bind(this) },
-            'Smooth'
+            { className: 'toggle col s4' },
+            React.createElement(
+              'div',
+              { className: 'title' },
+              'movement'
+            ),
+            React.createElement(
+              'div',
+              { className: 'col s6 btn-flat waves-effect ' + (this.state.movement == 'quartz' ? 'active' : 'inactive'),
+                onClick: this.setMovementHandler('quartz') },
+              'quartz'
+            ),
+            React.createElement(
+              'div',
+              { className: 'col s6 btn-flat waves-effect ' + (this.state.movement == 'mechanical' ? 'active' : 'inactive'),
+                onClick: this.setMovementHandler('mechanical') },
+              'mechanical'
+            )
+          ),
+          React.createElement(
+            'div',
+            { className: 'toggle col s8' },
+            React.createElement(
+              'div',
+              { className: 'title' },
+              'style'
+            ),
+            React.createElement(
+              'div',
+              { className: 'col s6 btn-flat waves-effect ' + (this.state.style == 'basic' ? 'active' : 'inactive'),
+                onClick: this.setStyleHandler('basic') },
+              'basic'
+            ),
+            React.createElement(
+              'div',
+              { className: 'col s6 btn-flat waves-effect ' + (this.state.style == 'retro' ? 'active' : 'inactive'),
+                onClick: this.setStyleHandler('retro') },
+              'retro'
+            )
           )
         )
       );
@@ -37815,13 +38105,72 @@ module.exports = Clock;
 "use strict";
 
 
+var setStyleAttributes = function setStyleAttributes(ctx, options) {
+  var stroke = options.stroke || { width: 1, style: '#000' };
+  ctx.strokeStyle = stroke.style;
+  ctx.lineWidth = stroke.width;
+  var fill = options.fill || { style: '#000' };
+  ctx.fillStyle = fill.style;
+  var shadow = options.shadow || {
+    color: '#333',
+    blur: 0,
+    offset: { x: 0, y: 0 }
+  };
+  ctx.shadowColor = shadow.color;
+  ctx.shadowBlur = shadow.blur;
+  ctx.shadowOffsetX = shadow.offset.x;
+  ctx.shadowOffsetY = shadow.offset.y;
+  var rotate = (options.rotate || 0) * Math.PI / 180.0;
+  ctx.rotate(rotate);
+};
+
+var reset = function reset(ctx) {
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+};
+
 var Drawing = {
   line: function line(ctx, options) {
     ctx.beginPath();
-    ctx.fillStyle = options.fill;
+    setStyleAttributes(ctx, options);
     ctx.moveTo(options.start.x, options.start.y);
     ctx.lineTo(options.finish.x, options.finish.y);
     ctx.stroke();
+    reset(ctx);
+  },
+
+  ring: function ring(ctx, options) {
+    ctx.beginPath();
+    setStyleAttributes(ctx, options);
+    ctx.arc(options.center.x, options.center.y, options.radius, 0, 2 * Math.PI);
+    ctx.stroke();
+    reset(ctx);
+  },
+
+  disc: function disc(ctx, options) {
+    ctx.beginPath();
+    setStyleAttributes(ctx, options);
+    ctx.arc(options.center.x, options.center.y, options.radius, 0, 2 * Math.PI);
+    ctx.fill();
+    reset(ctx);
+  },
+
+  circle: function circle(ctx, options) {
+    ctx.beginPath();
+    setStyleAttributes(ctx, options);
+    ctx.arc(options.center.x, options.center.y, options.radius, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.stroke();
+    reset(ctx);
+  },
+
+  rectangle: function rectangle(ctx, options) {
+    setStyleAttributes(ctx, options);
+    if (options.finish) {
+      options.width = options.finish.x - options.start.x;
+      options.height = options.finish.y - options.start.y;
+    }
+    ctx.fillRect(options.start.x, options.start.y, options.width, options.height);
+    reset(ctx);
   }
 };
 

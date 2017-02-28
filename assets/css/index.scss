@@ -33,6 +33,17 @@ $chip-selected-color: $secondary-color !default;
   }
 }
 
+.toggle {
+  .title {
+    margin: 0 auto 0.5rem;
+    text-align: center;
+  }
+  .btn-flat {
+    text-align: center;
+    margin: 0;
+  }
+}
+
 .home {
   .projects {
     .card-content {
