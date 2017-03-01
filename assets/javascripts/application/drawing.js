@@ -19,9 +19,35 @@ var setStyleAttributes = (ctx, options) => {
 
 var reset = (ctx) => {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-}
+};
+
+var normalizePoint = (point, ctx) => {
+  var canvas = ctx.canvas;
+  var normalized = {x: point.x, y: point.y};
+  if (point.nX) {
+    normalized.x = ctx.canvas.width * point.nX * 0.01;
+  }
+
+  if (point.nY) {
+    normalized.y = ctx.canvas.height * point.nY * 0.01;
+  }
+
+  return normalized;
+};
 
 var Drawing = {
+  bindDebug: ($, canvas) => {
+    $(canvas).click(((event) => {
+      var ctx = canvas.getContext('2d');
+      var offset = $(canvas).offset();
+      var relX = Math.round((event.pageX - offset.left - 10) * canvas.width/$(canvas).width() * 10.0) * 0.1;
+      var relY = Math.round((event.pageY - offset.top) * canvas.height/$(canvas).height() * 10.0) * 0.1;
+      var nX = Math.round(relX/(canvas.width * 0.001)) * 0.1;
+      var nY = Math.round(relY/(canvas.height * 0.001)) * 0.1;
+      console.log("Clicked at: { x: ", relX, ", y: ", relY, ", nX:", nX, ", nY: ", nY, " }");
+    }).bind(this));
+  },
+
   line: (ctx, options) => {
     ctx.beginPath();
     setStyleAttributes(ctx, options);
@@ -86,6 +112,22 @@ var Drawing = {
       options.width,
       options.height
     );
+    reset(ctx);
+  },
+
+  polygon: (ctx, options) => {
+    setStyleAttributes(ctx, options);
+    var points = options.points.map((point) => {
+      return normalizePoint(point, ctx);
+    });
+    var start = points[0];
+    ctx.beginPath();
+    ctx.moveTo(start.x, start.y);
+    points.slice(1).forEach((point) => {
+      ctx.lineTo(point.x, point.y);
+    });
+    ctx.closePath();
+    ctx.fill();
     reset(ctx);
   }
 }

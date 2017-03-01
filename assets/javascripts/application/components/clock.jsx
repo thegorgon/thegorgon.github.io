@@ -20,7 +20,7 @@ class Clock extends React.Component {
     this.state = {
       time: new Date(),
       movement: 'quartz',
-      style: 'basic'
+      style: 'retro'
     };
   }
 
@@ -30,6 +30,7 @@ class Clock extends React.Component {
         time:  new Date()
       })
     }).bind(this), 1);
+    Drawing.bindDebug($, this.refs.canvas);
   }
 
   componentWillUnmount() {
@@ -141,6 +142,8 @@ class Clock extends React.Component {
 
   renderRetroClock(data) {
     var r, theta, x, y;
+
+    // Clock face
     Drawing.ring(data.ctx, {
       stroke: {
         style: '#fff',
@@ -161,6 +164,7 @@ class Clock extends React.Component {
       radius: data.width * 0.25
     });
 
+    // Blue disc at bottom left of face
     Drawing.disc(data.ctx, {
       fill: {
         style: '#00f',
@@ -172,6 +176,7 @@ class Clock extends React.Component {
       radius: 12
     });
 
+    // Square to right of center of face
     Drawing.line(data.ctx, {
       stroke: {
         style: '#444',
@@ -187,6 +192,7 @@ class Clock extends React.Component {
       }
     });
 
+    // Red line of 3 line design at bottom left of face.
     Drawing.line(data.ctx, {
       stroke: {
         style: '#f00',
@@ -202,6 +208,7 @@ class Clock extends React.Component {
       }
     });
 
+    // Blue line of 3 line design at bottom left of face.
     Drawing.line(data.ctx, {
       stroke: {
         style: '#00f',
@@ -217,6 +224,7 @@ class Clock extends React.Component {
       }
     });
 
+    // Yellow line of 3 line design at bottom left of face.
     Drawing.line(data.ctx, {
       stroke: {
         style: '#ffdf00',
@@ -232,14 +240,15 @@ class Clock extends React.Component {
       }
     });
 
+    // Red line at top of face.
     Drawing.line(data.ctx, {
       stroke: {
         style: '#f00',
         width: 7
       },
       start: {
-        x: data.width * 0.48,
-        y: data.height * 0.15
+        x: data.width * 0.475,
+        y: data.height * 0.125
       },
       finish: {
         x: data.width * 0.52,
@@ -247,6 +256,7 @@ class Clock extends React.Component {
       }
     });
 
+    // 3 black dots at bottom right of face
     [ {x: 0.64, y: 0.70},
       {x: 0.647, y: 0.75},
       {x: 0.67, y: 0.72}
@@ -261,6 +271,44 @@ class Clock extends React.Component {
           y: center.y * data.height
         }
       })
+    });
+
+    // 3 green quadrilateral to left of center of face, left to right.
+    var green = 'rgba(17, 140, 121, 1)';
+    Drawing.polygon(data.ctx, {
+      fill: {
+        style: green
+      },
+      points: [
+        {nX: 39.5, nY: 26.7},
+        {nX: 37.4, nY: 38.2},
+        {nX: 39.7, nY: 37.4},
+        {nX: 41.7, nY: 27.5}
+      ]
+    });
+
+    Drawing.polygon(data.ctx, {
+      fill: {
+        style: green
+      },
+      points: [
+        {nX: 43.0, nY: 28.0},
+        {nX: 41.2, nY: 37.1},
+        {nX: 43.6, nY: 36.1},
+        {nX: 45.0, nY: 28.8}
+      ]
+    });
+
+    Drawing.polygon(data.ctx, {
+      fill: {
+        style: green
+      },
+      points: [
+        {nX: 46.1, nY: 29.2},
+        {nX: 45.0, nY: 35.7},
+        {nX: 47.2, nY: 35.0},
+        {nX: 48.0, nY: 30.1}
+      ]
     });
 
     // hour hand

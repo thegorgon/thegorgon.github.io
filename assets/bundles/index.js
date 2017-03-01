@@ -37637,7 +37637,7 @@ var Clock = function (_React$Component) {
     _this.state = {
       time: new Date(),
       movement: 'quartz',
-      style: 'basic'
+      style: 'retro'
     };
     return _this;
   }
@@ -37652,6 +37652,7 @@ var Clock = function (_React$Component) {
           time: new Date()
         });
       }.bind(this), 1);
+      Drawing.bindDebug($, this.refs.canvas);
     }
   }, {
     key: 'componentWillUnmount',
@@ -37767,6 +37768,8 @@ var Clock = function (_React$Component) {
     key: 'renderRetroClock',
     value: function renderRetroClock(data) {
       var r, theta, x, y;
+
+      // Clock face
       Drawing.ring(data.ctx, {
         stroke: {
           style: '#fff',
@@ -37787,6 +37790,7 @@ var Clock = function (_React$Component) {
         radius: data.width * 0.25
       });
 
+      // Blue disc at bottom left of face
       Drawing.disc(data.ctx, {
         fill: {
           style: '#00f'
@@ -37798,6 +37802,7 @@ var Clock = function (_React$Component) {
         radius: 12
       });
 
+      // Square to right of center of face
       Drawing.line(data.ctx, {
         stroke: {
           style: '#444',
@@ -37813,6 +37818,7 @@ var Clock = function (_React$Component) {
         }
       });
 
+      // Red line of 3 line design at bottom left of face.
       Drawing.line(data.ctx, {
         stroke: {
           style: '#f00',
@@ -37828,6 +37834,7 @@ var Clock = function (_React$Component) {
         }
       });
 
+      // Blue line of 3 line design at bottom left of face.
       Drawing.line(data.ctx, {
         stroke: {
           style: '#00f',
@@ -37843,6 +37850,7 @@ var Clock = function (_React$Component) {
         }
       });
 
+      // Yellow line of 3 line design at bottom left of face.
       Drawing.line(data.ctx, {
         stroke: {
           style: '#ffdf00',
@@ -37858,14 +37866,15 @@ var Clock = function (_React$Component) {
         }
       });
 
+      // Red line at top of face.
       Drawing.line(data.ctx, {
         stroke: {
           style: '#f00',
           width: 7
         },
         start: {
-          x: data.width * 0.48,
-          y: data.height * 0.15
+          x: data.width * 0.475,
+          y: data.height * 0.125
         },
         finish: {
           x: data.width * 0.52,
@@ -37873,6 +37882,7 @@ var Clock = function (_React$Component) {
         }
       });
 
+      // 3 black dots at bottom right of face
       [{ x: 0.64, y: 0.70 }, { x: 0.647, y: 0.75 }, { x: 0.67, y: 0.72 }].map(function (center) {
         Drawing.disc(data.ctx, {
           fill: {
@@ -37884,6 +37894,29 @@ var Clock = function (_React$Component) {
             y: center.y * data.height
           }
         });
+      });
+
+      // 3 green quadrilateral to left of center of face, left to right.
+      var green = 'rgba(17, 140, 121, 1)';
+      Drawing.polygon(data.ctx, {
+        fill: {
+          style: green
+        },
+        points: [{ nX: 39.5, nY: 26.7 }, { nX: 37.4, nY: 38.2 }, { nX: 39.7, nY: 37.4 }, { nX: 41.7, nY: 27.5 }]
+      });
+
+      Drawing.polygon(data.ctx, {
+        fill: {
+          style: green
+        },
+        points: [{ nX: 43.0, nY: 28.0 }, { nX: 41.2, nY: 37.1 }, { nX: 43.6, nY: 36.1 }, { nX: 45.0, nY: 28.8 }]
+      });
+
+      Drawing.polygon(data.ctx, {
+        fill: {
+          style: green
+        },
+        points: [{ nX: 46.1, nY: 29.2 }, { nX: 45.0, nY: 35.7 }, { nX: 47.2, nY: 35.0 }, { nX: 48.0, nY: 30.1 }]
       });
 
       // hour hand
@@ -38128,7 +38161,33 @@ var reset = function reset(ctx) {
   ctx.setTransform(1, 0, 0, 1, 0, 0);
 };
 
+var normalizePoint = function normalizePoint(point, ctx) {
+  var canvas = ctx.canvas;
+  var normalized = { x: point.x, y: point.y };
+  if (point.nX) {
+    normalized.x = ctx.canvas.width * point.nX * 0.01;
+  }
+
+  if (point.nY) {
+    normalized.y = ctx.canvas.height * point.nY * 0.01;
+  }
+
+  return normalized;
+};
+
 var Drawing = {
+  bindDebug: function bindDebug($, canvas) {
+    $(canvas).click(function (event) {
+      var ctx = canvas.getContext('2d');
+      var offset = $(canvas).offset();
+      var relX = Math.round((event.pageX - offset.left - 10) * canvas.width / $(canvas).width() * 10.0) * 0.1;
+      var relY = Math.round((event.pageY - offset.top) * canvas.height / $(canvas).height() * 10.0) * 0.1;
+      var nX = Math.round(relX / (canvas.width * 0.001)) * 0.1;
+      var nY = Math.round(relY / (canvas.height * 0.001)) * 0.1;
+      console.log("Clicked at: { x: ", relX, ", y: ", relY, ", nX:", nX, ", nY: ", nY, " }");
+    }.bind(undefined));
+  },
+
   line: function line(ctx, options) {
     ctx.beginPath();
     setStyleAttributes(ctx, options);
@@ -38170,6 +38229,22 @@ var Drawing = {
       options.height = options.finish.y - options.start.y;
     }
     ctx.fillRect(options.start.x, options.start.y, options.width, options.height);
+    reset(ctx);
+  },
+
+  polygon: function polygon(ctx, options) {
+    setStyleAttributes(ctx, options);
+    var points = options.points.map(function (point) {
+      return normalizePoint(point, ctx);
+    });
+    var start = points[0];
+    ctx.beginPath();
+    ctx.moveTo(start.x, start.y);
+    points.slice(1).forEach(function (point) {
+      ctx.lineTo(point.x, point.y);
+    });
+    ctx.closePath();
+    ctx.fill();
     reset(ctx);
   }
 };
