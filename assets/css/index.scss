@@ -83,7 +83,7 @@ $chip-selected-color: $secondary-color !default;
     margin: 0 auto;
     .divider {
       background: #fff;
-      @include animation('blink 2s infinite')
+      @include animation('blink 1s infinite')
     }
   }
   canvas {
