@@ -37636,7 +37636,7 @@ var Clock = function (_React$Component) {
 
     _this.state = {
       time: new Date(),
-      style: 'movado'
+      style: 'basic'
     };
     return _this;
   }

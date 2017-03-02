@@ -627,7 +627,6 @@ class Clock extends React.Component {
       center: { nX: 50, nY: 50 },
       radius: 3
     });
-
   }
 
 
