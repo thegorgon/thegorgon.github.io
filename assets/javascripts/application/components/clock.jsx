@@ -28,7 +28,7 @@ class Clock extends React.Component {
       this.setState({
         time: new Date()
       })
-    }).bind(this), 500);
+    }).bind(this), 1);
     Drawing.bindDebug($, this.refs.canvas);
   }
 
