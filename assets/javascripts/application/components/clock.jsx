@@ -19,8 +19,7 @@ class Clock extends React.Component {
 
     this.state = {
       time: new Date(),
-      movement: 'quartz',
-      style: 'retro'
+      style: 'basic'
     };
   }
 
@@ -42,7 +41,7 @@ class Clock extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     var canvas = this.refs.canvas;
     var seconds = this.state.time.getSeconds();
-    if (this.state.movement == 'mechanical') {
+    if (this.state.style != 'retro') {
       seconds += this.state.time.getMilliseconds() * 0.001;
     }
     var minutes = this.state.time.getMinutes() + seconds/60.0;
@@ -74,11 +73,8 @@ class Clock extends React.Component {
   renderBasicClock(data) {
     var r, r1, r2, theta, x, y;
     Drawing.ring(data.ctx, {
-      center: {
-        x: data.width * 0.5,
-        y: data.height * 0.5,
-      },
-      radius: data.width * 0.25
+      center: { nX: 50, nY: 50 },
+      nRadius: 25
     });
 
     for (var i = 0; i < 12; i++) {
@@ -157,11 +153,8 @@ class Clock extends React.Component {
           y: 1
         }
       },
-      center: {
-        x: data.width * 0.5,
-        y: data.height * 0.5,
-      },
-      radius: data.width * 0.25
+      center: { nX: 50, nY: 50 },
+      nRadius: 25
     });
 
     // Blue disc at bottom left of face
@@ -169,10 +162,7 @@ class Clock extends React.Component {
       fill: {
         style: '#00f',
       },
-      center: {
-        x: data.width * 0.42,
-        y: data.height * 0.77,
-      },
+      center: { nX: 42, nY: 77 },
       radius: 12
     });
 
@@ -182,14 +172,8 @@ class Clock extends React.Component {
         style: '#444',
         width: 20
       },
-      start: {
-        x: data.width * 0.55,
-        y: data.height * 0.52
-      },
-      finish: {
-        x: data.width * 0.575,
-        y: data.height * 0.53
-      }
+      start: { nX: 55, nY: 52 },
+      finish: { nX: 57.5, nY: 53 }
     });
 
     // Red line of 3 line design at bottom left of face.
@@ -198,14 +182,8 @@ class Clock extends React.Component {
         style: '#f00',
         width: 13
       },
-      start: {
-        x: data.width * 0.37,
-        y: data.height * 0.63
-      },
-      finish: {
-        x: data.width * 0.52,
-        y: data.height * 0.74
-      }
+      start: { nX: 37, nY: 63 },
+      finish: { nX: 52, nY: 74 }
     });
 
     // Blue line of 3 line design at bottom left of face.
@@ -214,14 +192,8 @@ class Clock extends React.Component {
         style: '#00f',
         width: 7
       },
-      start: {
-        x: data.width * 0.3,
-        y: data.height * 0.53
-      },
-      finish: {
-        x: data.width * 0.5,
-        y: data.height * 0.675
-      }
+      start: { nX: 30, nY: 53 },
+      finish: { nX: 50,  nY: 67.5 }
     });
 
     // Yellow line of 3 line design at bottom left of face.
@@ -230,14 +202,8 @@ class Clock extends React.Component {
         style: '#ffdf00',
         width: 15
       },
-      start: {
-        x: data.width * 0.43,
-        y: data.height * 0.59
-      },
-      finish: {
-        x: data.width * 0.39,
-        y: data.height * 0.73
-      }
+      start: { nX: 43.0, nY: 59 },
+      finish: { nX: 39, nY: 73 }
     });
 
     // Red line at top of face.
@@ -246,20 +212,14 @@ class Clock extends React.Component {
         style: '#f00',
         width: 7
       },
-      start: {
-        x: data.width * 0.475,
-        y: data.height * 0.125
-      },
-      finish: {
-        x: data.width * 0.52,
-        y: data.height * 0.3
-      }
+      start: { nX: 47.5, nY: 12.5 },
+      finish: { nX: 52, nY: 30 }
     });
 
     // 3 black dots at bottom right of face
-    [ {x: 0.64, y: 0.70},
-      {x: 0.647, y: 0.75},
-      {x: 0.67, y: 0.72}
+    [ {x: 64.0, y: 70},
+      {x: 64.7, y: 75},
+      {x: 67.0, y: 72}
     ].map((center) => {
       Drawing.disc(data.ctx, {
         fill: {
@@ -267,13 +227,14 @@ class Clock extends React.Component {
         },
         radius: 7,
         center: {
-          x: center.x * data.width,
-          y: center.y * data.height
+          nX: center.x,
+          nY: center.y
         }
       })
     });
 
     // 3 green quadrilateral to left of center of face, left to right.
+    // #1
     var green = 'rgba(17, 140, 121, 1)';
     Drawing.polygon(data.ctx, {
       fill: {
@@ -287,6 +248,7 @@ class Clock extends React.Component {
       ]
     });
 
+    // #2
     Drawing.polygon(data.ctx, {
       fill: {
         style: green
@@ -299,6 +261,7 @@ class Clock extends React.Component {
       ]
     });
 
+    // #3
     Drawing.polygon(data.ctx, {
       fill: {
         style: green
@@ -310,6 +273,30 @@ class Clock extends React.Component {
         {nX: 48.0, nY: 30.1}
       ]
     });
+
+    // Green arc
+    for (var i = 0; i < 4; i++) {
+      Drawing.arc(data.ctx, {
+        stroke: {
+          style: green,
+          width: 8
+        },
+        nRadius: 17,
+        center: { nX: 50, nY: 50 },
+        start: Math.PI/(-2) + Math.PI/16 * (i - 0.25) + Math.PI/6,
+        finish: Math.PI/(-2) + Math.PI/16 * (i + 0.25) + Math.PI/6
+      });
+    }
+
+    // Brand name
+    Drawing.text(data.ctx, {
+      fill: {
+        style: 'rgba(0,0,255,0.7)'
+      },
+      font: '100 small-caps 18px "Trebuchet MS", Helvetica, sans-serif',
+      text: 'swiss',
+      position: { nX: 67.5, nY: 51.5}
+    })
 
     // hour hand
     r = data.width * 0.13;
@@ -389,6 +376,7 @@ class Clock extends React.Component {
       },
     });
 
+    // Center pin.
     Drawing.circle(data.ctx, {
       fill: {
         style: '#eee'
@@ -413,14 +401,6 @@ class Clock extends React.Component {
 
   }
 
-  setMovementHandler(movement) {
-    return (() => {
-      this.setState({
-        movement: movement
-      });
-    }).bind(this);
-  }
-
   setStyleHandler(style) {
     return (() => {
       this.setState({
@@ -441,18 +421,7 @@ class Clock extends React.Component {
         </div>
         <canvas className='col s8 offset-s2' height='500' width='809' ref='canvas'></canvas>
         <div className='controls col s12'>
-          <div className='toggle col s4'>
-            <div className='title'>movement</div>
-            <div className={'col s6 btn-flat waves-effect ' + (this.state.movement == 'quartz' ? 'active' : 'inactive')}
-                onClick={this.setMovementHandler('quartz')}>
-                quartz
-            </div>
-            <div className={'col s6 btn-flat waves-effect ' + (this.state.movement == 'mechanical' ? 'active' : 'inactive')}
-                onClick={this.setMovementHandler('mechanical')}>
-                mechanical
-            </div>
-          </div>
-          <div className='toggle col s8'>
+          <div className='toggle col s12'>
             <div className='title'>style</div>
             <div className={'col s6 btn-flat waves-effect ' + (this.state.style == 'basic' ? 'active' : 'inactive')}
                 onClick={this.setStyleHandler('basic')}>

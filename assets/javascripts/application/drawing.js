@@ -2,6 +2,7 @@ var setStyleAttributes = (ctx, options) => {
   var stroke = options.stroke || { width: 1, style: '#000' }
   ctx.strokeStyle = stroke.style;
   ctx.lineWidth = stroke.width;
+  ctx.font = options.font;
   var fill = options.fill || { style: '#000' }
   ctx.fillStyle = fill.style;
   var shadow = options.shadow || {
@@ -45,14 +46,40 @@ var Drawing = {
       var nX = Math.round(relX/(canvas.width * 0.001)) * 0.1;
       var nY = Math.round(relY/(canvas.height * 0.001)) * 0.1;
       console.log("Clicked at: { x: ", relX, ", y: ", relY, ", nX:", nX, ", nY: ", nY, " }");
-    }).bind(this));
+    }));
+  },
+
+  text: (ctx, options) => {
+    setStyleAttributes(ctx, options);
+    var position = normalizePoint(options.position, ctx);
+    ctx.fillText(options.text, position.x, position.y);
+    reset(ctx);
   },
 
   line: (ctx, options) => {
     ctx.beginPath();
     setStyleAttributes(ctx, options);
-    ctx.moveTo(options.start.x, options.start.y);
-    ctx.lineTo(options.finish.x, options.finish.y);
+    var start = normalizePoint(options.start, ctx);
+    var finish = normalizePoint(options.finish, ctx);
+    ctx.moveTo(start.x, start.y);
+    ctx.lineTo(finish.x, finish.y);
+    ctx.stroke();
+    reset(ctx);
+  },
+
+  arc: (ctx, options) => {
+    ctx.beginPath();
+    setStyleAttributes(ctx, options);
+    var center = normalizePoint(options.center, ctx);
+    var radius = options.radius;
+    if (options.nRadius) { radius = ctx.canvas.width * options.nRadius/100.0; }
+    ctx.arc(
+      center.x,
+      center.y,
+      radius,
+      options.start,
+      options.finish
+    );
     ctx.stroke();
     reset(ctx);
   },
@@ -60,10 +87,13 @@ var Drawing = {
   ring: (ctx, options) => {
     ctx.beginPath();
     setStyleAttributes(ctx, options);
+    var center = normalizePoint(options.center, ctx);
+    var radius = options.radius;
+    if (options.nRadius) { radius = ctx.canvas.width * options.nRadius/100.0; }
     ctx.arc(
-      options.center.x,
-      options.center.y,
-      options.radius,
+      center.x,
+      center.y,
+      radius,
       0,
       2 * Math.PI
     );
@@ -74,10 +104,13 @@ var Drawing = {
   disc: (ctx, options) => {
     ctx.beginPath();
     setStyleAttributes(ctx, options);
+    var center = normalizePoint(options.center, ctx);
+    var radius = options.radius;
+    if (options.nRadius) { radius = ctx.canvas.width * options.nRadius/100.0; }
     ctx.arc(
-      options.center.x,
-      options.center.y,
-      options.radius,
+      center.x,
+      center.y,
+      radius,
       0,
       2 * Math.PI
     );

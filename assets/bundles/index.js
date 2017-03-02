@@ -37636,8 +37636,7 @@ var Clock = function (_React$Component) {
 
     _this.state = {
       time: new Date(),
-      movement: 'quartz',
-      style: 'retro'
+      style: 'basic'
     };
     return _this;
   }
@@ -37666,7 +37665,7 @@ var Clock = function (_React$Component) {
     value: function componentDidUpdate(prevProps, prevState) {
       var canvas = this.refs.canvas;
       var seconds = this.state.time.getSeconds();
-      if (this.state.movement == 'mechanical') {
+      if (this.state.style != 'retro') {
         seconds += this.state.time.getMilliseconds() * 0.001;
       }
       var minutes = this.state.time.getMinutes() + seconds / 60.0;
@@ -37699,11 +37698,8 @@ var Clock = function (_React$Component) {
     value: function renderBasicClock(data) {
       var r, r1, r2, theta, x, y;
       Drawing.ring(data.ctx, {
-        center: {
-          x: data.width * 0.5,
-          y: data.height * 0.5
-        },
-        radius: data.width * 0.25
+        center: { nX: 50, nY: 50 },
+        nRadius: 25
       });
 
       for (var i = 0; i < 12; i++) {
@@ -37783,11 +37779,8 @@ var Clock = function (_React$Component) {
             y: 1
           }
         },
-        center: {
-          x: data.width * 0.5,
-          y: data.height * 0.5
-        },
-        radius: data.width * 0.25
+        center: { nX: 50, nY: 50 },
+        nRadius: 25
       });
 
       // Blue disc at bottom left of face
@@ -37795,10 +37788,7 @@ var Clock = function (_React$Component) {
         fill: {
           style: '#00f'
         },
-        center: {
-          x: data.width * 0.42,
-          y: data.height * 0.77
-        },
+        center: { nX: 42, nY: 77 },
         radius: 12
       });
 
@@ -37808,14 +37798,8 @@ var Clock = function (_React$Component) {
           style: '#444',
           width: 20
         },
-        start: {
-          x: data.width * 0.55,
-          y: data.height * 0.52
-        },
-        finish: {
-          x: data.width * 0.575,
-          y: data.height * 0.53
-        }
+        start: { nX: 55, nY: 52 },
+        finish: { nX: 57.5, nY: 53 }
       });
 
       // Red line of 3 line design at bottom left of face.
@@ -37824,14 +37808,8 @@ var Clock = function (_React$Component) {
           style: '#f00',
           width: 13
         },
-        start: {
-          x: data.width * 0.37,
-          y: data.height * 0.63
-        },
-        finish: {
-          x: data.width * 0.52,
-          y: data.height * 0.74
-        }
+        start: { nX: 37, nY: 63 },
+        finish: { nX: 52, nY: 74 }
       });
 
       // Blue line of 3 line design at bottom left of face.
@@ -37840,14 +37818,8 @@ var Clock = function (_React$Component) {
           style: '#00f',
           width: 7
         },
-        start: {
-          x: data.width * 0.3,
-          y: data.height * 0.53
-        },
-        finish: {
-          x: data.width * 0.5,
-          y: data.height * 0.675
-        }
+        start: { nX: 30, nY: 53 },
+        finish: { nX: 50, nY: 67.5 }
       });
 
       // Yellow line of 3 line design at bottom left of face.
@@ -37856,14 +37828,8 @@ var Clock = function (_React$Component) {
           style: '#ffdf00',
           width: 15
         },
-        start: {
-          x: data.width * 0.43,
-          y: data.height * 0.59
-        },
-        finish: {
-          x: data.width * 0.39,
-          y: data.height * 0.73
-        }
+        start: { nX: 43.0, nY: 59 },
+        finish: { nX: 39, nY: 73 }
       });
 
       // Red line at top of face.
@@ -37872,31 +37838,26 @@ var Clock = function (_React$Component) {
           style: '#f00',
           width: 7
         },
-        start: {
-          x: data.width * 0.475,
-          y: data.height * 0.125
-        },
-        finish: {
-          x: data.width * 0.52,
-          y: data.height * 0.3
-        }
+        start: { nX: 47.5, nY: 12.5 },
+        finish: { nX: 52, nY: 30 }
       });
 
       // 3 black dots at bottom right of face
-      [{ x: 0.64, y: 0.70 }, { x: 0.647, y: 0.75 }, { x: 0.67, y: 0.72 }].map(function (center) {
+      [{ x: 64.0, y: 70 }, { x: 64.7, y: 75 }, { x: 67.0, y: 72 }].map(function (center) {
         Drawing.disc(data.ctx, {
           fill: {
             style: '#333'
           },
           radius: 7,
           center: {
-            x: center.x * data.width,
-            y: center.y * data.height
+            nX: center.x,
+            nY: center.y
           }
         });
       });
 
       // 3 green quadrilateral to left of center of face, left to right.
+      // #1
       var green = 'rgba(17, 140, 121, 1)';
       Drawing.polygon(data.ctx, {
         fill: {
@@ -37905,6 +37866,7 @@ var Clock = function (_React$Component) {
         points: [{ nX: 39.5, nY: 26.7 }, { nX: 37.4, nY: 38.2 }, { nX: 39.7, nY: 37.4 }, { nX: 41.7, nY: 27.5 }]
       });
 
+      // #2
       Drawing.polygon(data.ctx, {
         fill: {
           style: green
@@ -37912,11 +37874,36 @@ var Clock = function (_React$Component) {
         points: [{ nX: 43.0, nY: 28.0 }, { nX: 41.2, nY: 37.1 }, { nX: 43.6, nY: 36.1 }, { nX: 45.0, nY: 28.8 }]
       });
 
+      // #3
       Drawing.polygon(data.ctx, {
         fill: {
           style: green
         },
         points: [{ nX: 46.1, nY: 29.2 }, { nX: 45.0, nY: 35.7 }, { nX: 47.2, nY: 35.0 }, { nX: 48.0, nY: 30.1 }]
+      });
+
+      // Green arc
+      for (var i = 0; i < 4; i++) {
+        Drawing.arc(data.ctx, {
+          stroke: {
+            style: green,
+            width: 8
+          },
+          nRadius: 17,
+          center: { nX: 50, nY: 50 },
+          start: Math.PI / -2 + Math.PI / 16 * (i - 0.25) + Math.PI / 6,
+          finish: Math.PI / -2 + Math.PI / 16 * (i + 0.25) + Math.PI / 6
+        });
+      }
+
+      // Brand name
+      Drawing.text(data.ctx, {
+        fill: {
+          style: 'rgba(0,0,255,0.7)'
+        },
+        font: '100 small-caps 18px "Trebuchet MS", Helvetica, sans-serif',
+        text: 'swiss',
+        position: { nX: 67.5, nY: 51.5 }
       });
 
       // hour hand
@@ -37997,6 +37984,7 @@ var Clock = function (_React$Component) {
         }
       });
 
+      // Center pin.
       Drawing.circle(data.ctx, {
         fill: {
           style: '#eee'
@@ -38019,23 +38007,12 @@ var Clock = function (_React$Component) {
     key: 'renderClassicClock',
     value: function renderClassicClock(data) {}
   }, {
-    key: 'setMovementHandler',
-    value: function setMovementHandler(movement) {
+    key: 'setStyleHandler',
+    value: function setStyleHandler(style) {
       var _this3 = this;
 
       return function () {
         _this3.setState({
-          movement: movement
-        });
-      }.bind(this);
-    }
-  }, {
-    key: 'setStyleHandler',
-    value: function setStyleHandler(style) {
-      var _this4 = this;
-
-      return function () {
-        _this4.setState({
           style: style
         });
       }.bind(this);
@@ -38081,28 +38058,7 @@ var Clock = function (_React$Component) {
           { className: 'controls col s12' },
           React.createElement(
             'div',
-            { className: 'toggle col s4' },
-            React.createElement(
-              'div',
-              { className: 'title' },
-              'movement'
-            ),
-            React.createElement(
-              'div',
-              { className: 'col s6 btn-flat waves-effect ' + (this.state.movement == 'quartz' ? 'active' : 'inactive'),
-                onClick: this.setMovementHandler('quartz') },
-              'quartz'
-            ),
-            React.createElement(
-              'div',
-              { className: 'col s6 btn-flat waves-effect ' + (this.state.movement == 'mechanical' ? 'active' : 'inactive'),
-                onClick: this.setMovementHandler('mechanical') },
-              'mechanical'
-            )
-          ),
-          React.createElement(
-            'div',
-            { className: 'toggle col s8' },
+            { className: 'toggle col s12' },
             React.createElement(
               'div',
               { className: 'title' },
@@ -38142,6 +38098,7 @@ var setStyleAttributes = function setStyleAttributes(ctx, options) {
   var stroke = options.stroke || { width: 1, style: '#000' };
   ctx.strokeStyle = stroke.style;
   ctx.lineWidth = stroke.width;
+  ctx.font = options.font;
   var fill = options.fill || { style: '#000' };
   ctx.fillStyle = fill.style;
   var shadow = options.shadow || {
@@ -38185,14 +38142,36 @@ var Drawing = {
       var nX = Math.round(relX / (canvas.width * 0.001)) * 0.1;
       var nY = Math.round(relY / (canvas.height * 0.001)) * 0.1;
       console.log("Clicked at: { x: ", relX, ", y: ", relY, ", nX:", nX, ", nY: ", nY, " }");
-    }.bind(undefined));
+    });
+  },
+
+  text: function text(ctx, options) {
+    setStyleAttributes(ctx, options);
+    var position = normalizePoint(options.position, ctx);
+    ctx.fillText(options.text, position.x, position.y);
+    reset(ctx);
   },
 
   line: function line(ctx, options) {
     ctx.beginPath();
     setStyleAttributes(ctx, options);
-    ctx.moveTo(options.start.x, options.start.y);
-    ctx.lineTo(options.finish.x, options.finish.y);
+    var start = normalizePoint(options.start, ctx);
+    var finish = normalizePoint(options.finish, ctx);
+    ctx.moveTo(start.x, start.y);
+    ctx.lineTo(finish.x, finish.y);
+    ctx.stroke();
+    reset(ctx);
+  },
+
+  arc: function arc(ctx, options) {
+    ctx.beginPath();
+    setStyleAttributes(ctx, options);
+    var center = normalizePoint(options.center, ctx);
+    var radius = options.radius;
+    if (options.nRadius) {
+      radius = ctx.canvas.width * options.nRadius / 100.0;
+    }
+    ctx.arc(center.x, center.y, radius, options.start, options.finish);
     ctx.stroke();
     reset(ctx);
   },
@@ -38200,7 +38179,12 @@ var Drawing = {
   ring: function ring(ctx, options) {
     ctx.beginPath();
     setStyleAttributes(ctx, options);
-    ctx.arc(options.center.x, options.center.y, options.radius, 0, 2 * Math.PI);
+    var center = normalizePoint(options.center, ctx);
+    var radius = options.radius;
+    if (options.nRadius) {
+      radius = ctx.canvas.width * options.nRadius / 100.0;
+    }
+    ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
     ctx.stroke();
     reset(ctx);
   },
@@ -38208,7 +38192,12 @@ var Drawing = {
   disc: function disc(ctx, options) {
     ctx.beginPath();
     setStyleAttributes(ctx, options);
-    ctx.arc(options.center.x, options.center.y, options.radius, 0, 2 * Math.PI);
+    var center = normalizePoint(options.center, ctx);
+    var radius = options.radius;
+    if (options.nRadius) {
+      radius = ctx.canvas.width * options.nRadius / 100.0;
+    }
+    ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
     ctx.fill();
     reset(ctx);
   },
