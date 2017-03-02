@@ -38262,19 +38262,19 @@ var Clock = function (_React$Component) {
             ),
             React.createElement(
               'div',
-              { className: 'col s6 m4 btn-flat waves-effect ' + (this.state.style == 'basic' ? 'active' : 'inactive'),
+              { className: 'col s4 btn-flat waves-effect ' + (this.state.style == 'basic' ? 'active' : 'inactive'),
                 onClick: this.setStyleHandler('basic') },
               'basic'
             ),
             React.createElement(
               'div',
-              { className: 'col s6 m4 btn-flat waves-effect ' + (this.state.style == 'retro' ? 'active' : 'inactive'),
+              { className: 'col s4 btn-flat waves-effect ' + (this.state.style == 'retro' ? 'active' : 'inactive'),
                 onClick: this.setStyleHandler('retro') },
               'retro'
             ),
             React.createElement(
               'div',
-              { className: 'col s6 m4 btn-flat waves-effect ' + (this.state.style == 'movado' ? 'active' : 'inactive'),
+              { className: 'col s4 btn-flat waves-effect ' + (this.state.style == 'movado' ? 'active' : 'inactive'),
                 onClick: this.setStyleHandler('movado') },
               'movado'
             )

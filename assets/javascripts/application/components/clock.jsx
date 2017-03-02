@@ -652,15 +652,15 @@ class Clock extends React.Component {
         <div className='controls col s12'>
           <div className='toggle col s12'>
             <div className='title'>style</div>
-            <div className={'col s6 m4 btn-flat waves-effect ' + (this.state.style == 'basic' ? 'active' : 'inactive')}
+            <div className={'col s4 btn-flat waves-effect ' + (this.state.style == 'basic' ? 'active' : 'inactive')}
                 onClick={this.setStyleHandler('basic')}>
                 basic
             </div>
-            <div className={'col s6 m4 btn-flat waves-effect ' + (this.state.style == 'retro' ? 'active' : 'inactive')}
+            <div className={'col s4 btn-flat waves-effect ' + (this.state.style == 'retro' ? 'active' : 'inactive')}
                 onClick={this.setStyleHandler('retro')}>
                 retro
             </div>
-            <div className={'col s6 m4 btn-flat waves-effect ' + (this.state.style == 'movado' ? 'active' : 'inactive')}
+            <div className={'col s4 btn-flat waves-effect ' + (this.state.style == 'movado' ? 'active' : 'inactive')}
                 onClick={this.setStyleHandler('movado')}>
                 movado
             </div>
