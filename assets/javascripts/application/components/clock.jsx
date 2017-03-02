@@ -19,7 +19,7 @@ class Clock extends React.Component {
 
     this.state = {
       time: new Date(),
-      style: 'movado'
+      style: 'basic'
     };
   }
 
