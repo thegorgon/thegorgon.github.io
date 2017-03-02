@@ -37634,9 +37634,13 @@ var Clock = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (Clock.__proto__ || Object.getPrototypeOf(Clock)).call(this, props));
 
+    var style = window.location.search;
+    if (['retro', 'basic', 'movado'].indexOf(style) === -1) {
+      style = 'basic';
+    }
     _this.state = {
       time: new Date(),
-      style: 'basic'
+      style: style
     };
     return _this;
   }
@@ -37698,6 +37702,7 @@ var Clock = function (_React$Component) {
     value: function renderBasicClock(data) {
       var r, r1, r2, theta, x, y;
       Drawing.ring(data.ctx, {
+        stroke: { nWidth: 0.1 },
         center: { nX: 50, nY: 50 },
         nRadius: 25
       });
@@ -37707,6 +37712,7 @@ var Clock = function (_React$Component) {
         r2 = data.width * 0.23;
         theta = i * (2 * Math.PI) / 12.0 - Math.PI / 2.0;
         Drawing.line(data.ctx, {
+          stroke: { nWidth: 0.1 },
           start: {
             x: r1 * Math.cos(theta) + data.width * 0.5,
             y: r1 * Math.sin(theta) + data.height * 0.5
@@ -37722,6 +37728,7 @@ var Clock = function (_React$Component) {
       r = data.width * 0.22;
       theta = data.seconds * (2 * Math.PI) / 60.0 - Math.PI / 2.0;
       Drawing.line(data.ctx, {
+        stroke: { nWidth: 0.1 },
         start: {
           x: data.width * 0.5,
           y: data.height * 0.5
@@ -37736,6 +37743,7 @@ var Clock = function (_React$Component) {
       r = data.width * 0.20;
       theta = data.minutes * (2 * Math.PI) / 60.0 - Math.PI / 2.0;
       Drawing.line(data.ctx, {
+        stroke: { nWidth: 0.1 },
         start: {
           x: data.width * 0.5,
           y: data.height * 0.5
@@ -37750,6 +37758,7 @@ var Clock = function (_React$Component) {
       r = data.width * 0.125;
       theta = data.hours % 12 * (2 * Math.PI) / 12.0 - Math.PI / 2.0;
       Drawing.line(data.ctx, {
+        stroke: { nWidth: 0.1 },
         start: {
           x: data.width * 0.5,
           y: data.height * 0.5
@@ -37769,14 +37778,14 @@ var Clock = function (_React$Component) {
       Drawing.ring(data.ctx, {
         stroke: {
           style: '#fff',
-          width: 10
+          nWidth: 1
         },
         shadow: {
           color: '#333',
-          blur: 2,
+          nBlur: 0.2,
           offset: {
-            x: 1,
-            y: 1
+            nX: 0.1,
+            nY: 0.1
           }
         },
         center: { nX: 50, nY: 50 },
@@ -37789,14 +37798,14 @@ var Clock = function (_React$Component) {
           style: '#00f'
         },
         center: { nX: 42, nY: 77 },
-        radius: 12
+        nRadius: 1.2
       });
 
       // Square to right of center of face
       Drawing.line(data.ctx, {
         stroke: {
           style: '#444',
-          width: 20
+          nWidth: 2
         },
         start: { nX: 55, nY: 52 },
         finish: { nX: 57.5, nY: 53 }
@@ -37806,7 +37815,7 @@ var Clock = function (_React$Component) {
       Drawing.line(data.ctx, {
         stroke: {
           style: '#f00',
-          width: 13
+          nWidth: 1.3
         },
         start: { nX: 37, nY: 63 },
         finish: { nX: 52, nY: 74 }
@@ -37816,7 +37825,7 @@ var Clock = function (_React$Component) {
       Drawing.line(data.ctx, {
         stroke: {
           style: '#00f',
-          width: 7
+          nWidth: 0.7
         },
         start: { nX: 30, nY: 53 },
         finish: { nX: 50, nY: 67.5 }
@@ -37826,7 +37835,7 @@ var Clock = function (_React$Component) {
       Drawing.line(data.ctx, {
         stroke: {
           style: '#ffdf00',
-          width: 15
+          nWidth: 1.5
         },
         start: { nX: 43.0, nY: 59 },
         finish: { nX: 39, nY: 73 }
@@ -37836,7 +37845,7 @@ var Clock = function (_React$Component) {
       Drawing.line(data.ctx, {
         stroke: {
           style: '#f00',
-          width: 7
+          nWidth: 0.7
         },
         start: { nX: 47.5, nY: 12.5 },
         finish: { nX: 52, nY: 30 }
@@ -37848,7 +37857,7 @@ var Clock = function (_React$Component) {
           fill: {
             style: '#333'
           },
-          radius: 7,
+          nRadius: 0.7,
           center: {
             nX: center.x,
             nY: center.y
@@ -37887,7 +37896,7 @@ var Clock = function (_React$Component) {
         Drawing.arc(data.ctx, {
           stroke: {
             style: green,
-            width: 8
+            nWidth: 0.8
           },
           nRadius: 17,
           center: { nX: 50, nY: 50 },
@@ -37912,7 +37921,7 @@ var Clock = function (_React$Component) {
       Drawing.line(data.ctx, {
         stroke: {
           style: '#ffdf00',
-          width: 12
+          nWidth: 1.2
         },
         start: {
           x: data.width * 0.5 - 0.1 * r * Math.cos(theta),
@@ -37924,10 +37933,10 @@ var Clock = function (_React$Component) {
         },
         shadow: {
           color: 'rgba(0, 0, 0, 0.5)',
-          blur: 2,
+          nBlur: 0.2,
           offset: {
-            x: 2,
-            y: 2
+            nX: 0.2,
+            nY: 0.2
           }
         }
       });
@@ -37938,7 +37947,7 @@ var Clock = function (_React$Component) {
       Drawing.line(data.ctx, {
         stroke: {
           style: '#f00',
-          width: 8
+          nWidth: 0.8
         },
         start: {
           x: data.width * 0.5 - 0.1 * r * Math.cos(theta),
@@ -37950,10 +37959,10 @@ var Clock = function (_React$Component) {
         },
         shadow: {
           color: 'rgba(0, 0, 0, 0.5)',
-          blur: 4,
+          nBlur: 0.4,
           offset: {
-            x: 4,
-            y: 4
+            nX: 0.4,
+            nY: 0.4
           }
         }
       });
@@ -37976,10 +37985,10 @@ var Clock = function (_React$Component) {
         },
         shadow: {
           color: 'rgba(0, 0, 0, 0.5)',
-          blur: 6,
+          nBlur: 0.6,
           offset: {
-            x: 5,
-            y: 5
+            nX: 0.5,
+            nY: 0.5
           }
         }
       });
@@ -37994,10 +38003,10 @@ var Clock = function (_React$Component) {
           width: 2
         },
         center: {
-          x: data.width * 0.5,
-          y: data.height * 0.5
+          nX: 50,
+          nY: 50
         },
-        radius: 6
+        nRadius: 0.6
       });
     }
   }, {
@@ -38012,15 +38021,11 @@ var Clock = function (_React$Component) {
             finish: { nX: 100, nY: 100 },
             stops: [{ position: 0.0, color: '#fff' }, { position: 0.25, color: '#fff' }, { position: 0.27, color: '#000' }, { position: 0.4, color: '#000' }, { position: 0.5, color: '#fff' }, { position: 1.0, color: '#fff' }]
           },
-          width: 20
+          nWidth: 2
         },
         shadow: {
           color: '#000',
-          blur: 3,
-          offset: {
-            x: 0,
-            y: 0
-          }
+          nBlur: 0.3
         },
         center: { nX: 50, nY: 50 },
         nRadius: 25
@@ -38248,7 +38253,7 @@ var Clock = function (_React$Component) {
             this.state.time.getSeconds().lpad(2)
           )
         ),
-        React.createElement('canvas', { className: 'col s8 offset-s2', height: '500', width: '809', ref: 'canvas' }),
+        React.createElement('canvas', { className: 'col s8 offset-s2', height: '1000', width: '1618', ref: 'canvas' }),
         React.createElement(
           'div',
           { className: 'controls col s12' },
@@ -38324,10 +38329,11 @@ var setStyleAttributes = function setStyleAttributes(ctx, options) {
     blur: 0,
     offset: { x: 0, y: 0 }
   };
+  var shadowOffset = normalizePoint(shadow.offset || { x: 0, y: 0 }, ctx);
   ctx.shadowColor = shadow.color;
-  ctx.shadowBlur = shadow.blur;
-  ctx.shadowOffsetX = shadow.offset.x;
-  ctx.shadowOffsetY = shadow.offset.y;
+  ctx.shadowBlur = normalizeBlur(shadow, ctx);
+  ctx.shadowOffsetX = shadowOffset.x;
+  ctx.shadowOffsetY = shadowOffset.y;
   var rotate = (options.rotate || 0) * Math.PI / 180.0;
   ctx.rotate(rotate);
   var stroke = options.stroke || { width: 1, style: '#000' };
@@ -38336,7 +38342,7 @@ var setStyleAttributes = function setStyleAttributes(ctx, options) {
   } else {
     ctx.strokeStyle = stroke.style;
   }
-  ctx.lineWidth = stroke.width;
+  ctx.lineWidth = normalizeWidth(stroke, ctx);
   var fill = options.fill || { style: '#000' };
   if (fill.gradient) {
     ctx.fillStyle = buildGradient(ctx, fill.gradient);
@@ -38369,6 +38375,30 @@ var normalizeRadius = function normalizeRadius(options, ctx) {
     radius = ctx.canvas.width * options.nRadius / 100.0;
   }
   return radius;
+};
+
+var normalizeWidth = function normalizeWidth(options, ctx) {
+  var width = options.width;
+  if (options.nWidth) {
+    width = ctx.canvas.width * options.nWidth / 100.0;
+  }
+  return width;
+};
+
+var normalizeHeight = function normalizeHeight(options, ctx) {
+  var height = options.height;
+  if (options.nHeight) {
+    width = ctx.canvas.height * options.nHeight / 100.0;
+  }
+  return height;
+};
+
+var normalizeBlur = function normalizeBlur(options, ctx) {
+  var blur = options.blur;
+  if (options.nBlur) {
+    blur = ctx.canvas.width * options.nBlur / 100.0;
+  }
+  return blur;
 };
 
 var Drawing = {
@@ -38435,7 +38465,9 @@ var Drawing = {
   circle: function circle(ctx, options) {
     ctx.beginPath();
     setStyleAttributes(ctx, options);
-    ctx.arc(options.center.x, options.center.y, options.radius, 0, 2 * Math.PI);
+    var center = normalizePoint(options.center, ctx);
+    var radius = normalizeRadius(options, ctx);
+    ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
     ctx.fill();
     ctx.stroke();
     reset(ctx);
@@ -38443,11 +38475,15 @@ var Drawing = {
 
   rectangle: function rectangle(ctx, options) {
     setStyleAttributes(ctx, options);
+    var start = normalizePoint(options.start, ctx);
+    var finish = normalizePoint(options.finish, ctx);
+    var width = normalizeWidth(options, ctx);
+    var height = normalizeHeight(options, ctx);
     if (options.finish) {
-      options.width = options.finish.x - options.start.x;
-      options.height = options.finish.y - options.start.y;
+      width = finish.x - start.x;
+      height = finish.y - start.y;
     }
-    ctx.fillRect(options.start.x, options.start.y, options.width, options.height);
+    ctx.fillRect(start.x, start.y, width, height);
     reset(ctx);
   },
 

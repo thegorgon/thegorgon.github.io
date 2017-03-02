@@ -26,10 +26,11 @@ var setStyleAttributes = (ctx, options) => {
     blur: 0,
     offset: {x: 0, y: 0}
   }
+  var shadowOffset = normalizePoint(shadow.offset || {x: 0, y: 0}, ctx);
   ctx.shadowColor = shadow.color;
-  ctx.shadowBlur = shadow.blur;
-  ctx.shadowOffsetX = shadow.offset.x;
-  ctx.shadowOffsetY = shadow.offset.y;
+  ctx.shadowBlur = normalizeBlur(shadow, ctx);
+  ctx.shadowOffsetX = shadowOffset.x;
+  ctx.shadowOffsetY = shadowOffset.y;
   var rotate = (options.rotate || 0) * Math.PI/180.0;
   ctx.rotate(rotate);
   var stroke = options.stroke || { width: 1, style: '#000' }
@@ -38,7 +39,7 @@ var setStyleAttributes = (ctx, options) => {
   } else {
     ctx.strokeStyle = stroke.style;
   }
-  ctx.lineWidth = stroke.width;
+  ctx.lineWidth = normalizeWidth(stroke, ctx);
   var fill = options.fill || { style: '#000' }
   if (fill.gradient) {
     ctx.fillStyle = buildGradient(ctx, fill.gradient);
@@ -69,6 +70,24 @@ var normalizeRadius = (options, ctx) => {
   var radius = options.radius;
   if (options.nRadius) { radius = ctx.canvas.width * options.nRadius/100.0; }
   return radius;
+}
+
+var normalizeWidth = (options, ctx) => {
+  var width = options.width;
+  if (options.nWidth) { width = ctx.canvas.width * options.nWidth/100.0; }
+  return width;
+}
+
+var normalizeHeight = (options, ctx) => {
+  var height = options.height;
+  if (options.nHeight) { width = ctx.canvas.height * options.nHeight/100.0; }
+  return height;
+}
+
+var normalizeBlur = (options, ctx) => {
+  var blur = options.blur;
+  if (options.nBlur) { blur = ctx.canvas.width * options.nBlur/100.0; }
+  return blur;
 }
 
 var Drawing = {
@@ -153,10 +172,12 @@ var Drawing = {
   circle: (ctx, options) => {
     ctx.beginPath();
     setStyleAttributes(ctx, options);
+    var center = normalizePoint(options.center, ctx);
+    var radius = normalizeRadius(options, ctx);
     ctx.arc(
-      options.center.x,
-      options.center.y,
-      options.radius,
+      center.x,
+      center.y,
+      radius,
       0,
       2 * Math.PI
     );
@@ -167,15 +188,19 @@ var Drawing = {
 
   rectangle: (ctx, options) => {
     setStyleAttributes(ctx, options);
+    var start = normalizePoint(options.start, ctx);
+    var finish = normalizePoint(options.finish, ctx);
+    var width = normalizeWidth(options, ctx);
+    var height = normalizeHeight(options, ctx);
     if (options.finish) {
-      options.width = options.finish.x - options.start.x;
-      options.height = options.finish.y - options.start.y;
+      width = finish.x - start.x;
+      height = finish.y - start.y;
     }
     ctx.fillRect(
-      options.start.x,
-      options.start.y,
-      options.width,
-      options.height
+      start.x,
+      start.y,
+      width,
+      height
     );
     reset(ctx);
   },
