@@ -11130,10 +11130,10 @@ button.picker__close:focus {
 
 .clock .digital .divider {
   background: #fff;
-  -webkit-animation: blink 2s infinite;
-  -moz-animation: blink 2s infinite;
-  -o-animation: blink 2s infinite;
-  animation: blink 2s infinite;
+  -webkit-animation: blink 1s infinite;
+  -moz-animation: blink 1s infinite;
+  -o-animation: blink 1s infinite;
+  animation: blink 1s infinite;
 }
 
 .clock canvas {

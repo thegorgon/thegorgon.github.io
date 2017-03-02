@@ -37636,7 +37636,7 @@ var Clock = function (_React$Component) {
 
     _this.state = {
       time: new Date(),
-      style: 'basic'
+      style: 'movado'
     };
     return _this;
   }
@@ -37650,7 +37650,7 @@ var Clock = function (_React$Component) {
         _this2.setState({
           time: new Date()
         });
-      }.bind(this), 1);
+      }.bind(this), 500);
       Drawing.bindDebug($, this.refs.canvas);
     }
   }, {
@@ -38002,10 +38002,206 @@ var Clock = function (_React$Component) {
     }
   }, {
     key: 'renderMovadoClock',
-    value: function renderMovadoClock(data) {}
-  }, {
-    key: 'renderClassicClock',
-    value: function renderClassicClock(data) {}
+    value: function renderMovadoClock(data) {
+      // Clock face
+      Drawing.ring(data.ctx, {
+        stroke: {
+          gradient: {
+            type: 'linear',
+            start: { nX: 90.0, nY: 0.0 },
+            finish: { nX: 100, nY: 100 },
+            stops: [{ position: 0.0, color: '#fff' }, { position: 0.25, color: '#fff' }, { position: 0.27, color: '#000' }, { position: 0.4, color: '#000' }, { position: 0.5, color: '#fff' }, { position: 1.0, color: '#fff' }]
+          },
+          width: 20
+        },
+        shadow: {
+          color: '#000',
+          blur: 3,
+          offset: {
+            x: 0,
+            y: 0
+          }
+        },
+        center: { nX: 50, nY: 50 },
+        nRadius: 25
+      });
+
+      Drawing.disc(data.ctx, {
+        fill: { style: '#000' },
+        center: { nX: 50, nY: 50 },
+        nRadius: 25
+      });
+
+      Drawing.ring(data.ctx, {
+        stroke: {
+          style: '#fff',
+          width: 5
+        },
+        shadow: {
+          color: '#000',
+          blur: 1,
+          offset: {
+            x: 0,
+            y: 0
+          }
+        },
+        center: { nX: 50, nY: 50 },
+        nRadius: 24.7
+      });
+
+      Drawing.disc(data.ctx, {
+        fill: {
+          gradient: {
+            type: 'linear',
+            start: { nX: 90.0, nY: 0.0 },
+            finish: { nX: 100, nY: 100 },
+            stops: [{ position: 0.0, color: 'rgba(0,0,0,0)' }, { position: 1.0, color: 'rgba(0,0,0,0.3)' }]
+          }
+        },
+        center: { nX: 50, nY: 50 },
+        nRadius: 26.5
+      });
+
+      Drawing.ring(data.ctx, {
+        stroke: {
+          style: '#fff',
+          width: 3
+        },
+        center: { nX: 50, nY: 19 },
+        nRadius: 2.5
+      });
+
+      Drawing.disc(data.ctx, {
+        fill: {
+          gradient: {
+            type: 'radial',
+            start: {
+              center: { nX: 50.0, nY: 18.0 },
+              nRadius: 2.5
+            },
+            finish: {
+              center: { nX: 50.0, nY: 23.0 },
+              nRadius: 2
+            },
+            stops: [{ position: 0.0, color: '#000' }, { position: 0.5, color: '#000' }, { position: 0.51, color: '#999' }, { position: 1.0, color: '#fff' }]
+          }
+        },
+        center: { nX: 50, nY: 19 },
+        nRadius: 2.5
+      });
+
+      var r, theta, h, b;
+      // hour hand
+      r = data.width * 0.13;
+      h = data.width * 0.01;
+      b = 0.2 * r;
+      theta = data.hours % 12 * (2 * Math.PI) / 12.0 - Math.PI / 2.0;
+      Drawing.polygon(data.ctx, {
+        fill: {
+          style: '#aaa'
+        },
+        points: [{
+          x: data.width * 0.5 - b * Math.cos(theta),
+          y: data.height * 0.5 - b * Math.sin(theta)
+        }, {
+          x: r * Math.cos(theta) + data.width * 0.5,
+          y: r * Math.sin(theta) + data.height * 0.5
+        }, {
+          x: data.width * 0.5 + h * Math.cos(Math.PI / 2 + theta),
+          y: data.height * 0.5 + h * Math.sin(Math.PI / 2 + theta)
+        }]
+      });
+      Drawing.polygon(data.ctx, {
+        fill: {
+          style: '#efefef'
+        },
+        points: [{
+          x: data.width * 0.5 - b * Math.cos(theta),
+          y: data.height * 0.5 - b * Math.sin(theta)
+        }, {
+          x: r * Math.cos(theta) + data.width * 0.5,
+          y: r * Math.sin(theta) + data.height * 0.5
+        }, {
+          x: data.width * 0.5 - h * Math.cos(Math.PI / 2 + theta),
+          y: data.height * 0.5 - h * Math.sin(Math.PI / 2 + theta)
+        }]
+      });
+      Drawing.line(data.ctx, {
+        stroke: {
+          style: '#fff'
+        },
+        start: {
+          x: data.width * 0.5,
+          y: data.height * 0.5
+        },
+        finish: {
+          x: r * Math.cos(theta) + data.width * 0.5,
+          y: r * Math.sin(theta) + data.height * 0.5
+        }
+      });
+
+      // minute hand
+      r = data.width * 0.20;
+      h = data.width * 0.015;
+      b = 0.1 * r;
+      theta = data.minutes * (2 * Math.PI) / 60.0 - Math.PI / 2.0;
+      Drawing.polygon(data.ctx, {
+        fill: {
+          style: '#aaa'
+        },
+        points: [{
+          x: data.width * 0.5 - b * Math.cos(theta),
+          y: data.height * 0.5 - b * Math.sin(theta)
+        }, {
+          x: r * Math.cos(theta) + data.width * 0.5,
+          y: r * Math.sin(theta) + data.height * 0.5
+        }, {
+          x: data.width * 0.5 + h * Math.cos(Math.PI / 2 + theta),
+          y: data.height * 0.5 + h * Math.sin(Math.PI / 2 + theta)
+        }]
+      });
+      Drawing.polygon(data.ctx, {
+        fill: {
+          style: '#efefef'
+        },
+        points: [{
+          x: data.width * 0.5 - b * Math.cos(theta),
+          y: data.height * 0.5 - b * Math.sin(theta)
+        }, {
+          x: r * Math.cos(theta) + data.width * 0.5,
+          y: r * Math.sin(theta) + data.height * 0.5
+        }, {
+          x: data.width * 0.5 - h * Math.cos(Math.PI / 2 + theta),
+          y: data.height * 0.5 - h * Math.sin(Math.PI / 2 + theta)
+        }]
+      });
+      Drawing.line(data.ctx, {
+        stroke: {
+          style: '#fff'
+        },
+        start: {
+          x: data.width * 0.5,
+          y: data.height * 0.5
+        },
+        finish: {
+          x: r * Math.cos(theta) + data.width * 0.5,
+          y: r * Math.sin(theta) + data.height * 0.5
+        }
+      });
+
+      Drawing.disc(data.ctx, {
+        fill: {
+          gradient: {
+            type: 'linear',
+            start: { nX: 50, nY: 49 },
+            finish: { nX: 50, nY: 51 },
+            stops: [{ position: 0.0, color: '#9f9f9f' }, { position: 0.5, color: '#999' }, { position: 1.0, color: '#333' }]
+          }
+        },
+        center: { nX: 50, nY: 50 },
+        radius: 3
+      });
+    }
   }, {
     key: 'setStyleHandler',
     value: function setStyleHandler(style) {
@@ -38066,15 +38262,21 @@ var Clock = function (_React$Component) {
             ),
             React.createElement(
               'div',
-              { className: 'col s6 btn-flat waves-effect ' + (this.state.style == 'basic' ? 'active' : 'inactive'),
+              { className: 'col s6 m4 btn-flat waves-effect ' + (this.state.style == 'basic' ? 'active' : 'inactive'),
                 onClick: this.setStyleHandler('basic') },
               'basic'
             ),
             React.createElement(
               'div',
-              { className: 'col s6 btn-flat waves-effect ' + (this.state.style == 'retro' ? 'active' : 'inactive'),
+              { className: 'col s6 m4 btn-flat waves-effect ' + (this.state.style == 'retro' ? 'active' : 'inactive'),
                 onClick: this.setStyleHandler('retro') },
               'retro'
+            ),
+            React.createElement(
+              'div',
+              { className: 'col s6 m4 btn-flat waves-effect ' + (this.state.style == 'movado' ? 'active' : 'inactive'),
+                onClick: this.setStyleHandler('movado') },
+              'movado'
             )
           )
         )
@@ -38094,13 +38296,29 @@ module.exports = Clock;
 "use strict";
 
 
+var buildGradient = function buildGradient(ctx, options) {
+  var gradient;
+  if (options.type == 'linear') {
+    var start = normalizePoint(options.start, ctx);
+    var finish = normalizePoint(options.finish, ctx);
+    gradient = ctx.createLinearGradient(start.x, start.y, finish.x, finish.y);
+  } else if (options.type == 'radial') {
+    var startCenter = normalizePoint(options.start.center, ctx);
+    var finishCenter = normalizePoint(options.finish.center, ctx);
+    var startRadius = normalizeRadius(options.start, ctx);
+    var finishRadius = normalizeRadius(options.finish, ctx);
+    gradient = ctx.createRadialGradient(startCenter.x, startCenter.y, startRadius, finishCenter.x, finishCenter.y, finishRadius);
+  }
+  if (gradient) {
+    options.stops.forEach(function (stop) {
+      gradient.addColorStop(stop.position, stop.color);
+    });
+  }
+  return gradient;
+};
+
 var setStyleAttributes = function setStyleAttributes(ctx, options) {
-  var stroke = options.stroke || { width: 1, style: '#000' };
-  ctx.strokeStyle = stroke.style;
-  ctx.lineWidth = stroke.width;
   ctx.font = options.font;
-  var fill = options.fill || { style: '#000' };
-  ctx.fillStyle = fill.style;
   var shadow = options.shadow || {
     color: '#333',
     blur: 0,
@@ -38112,6 +38330,19 @@ var setStyleAttributes = function setStyleAttributes(ctx, options) {
   ctx.shadowOffsetY = shadow.offset.y;
   var rotate = (options.rotate || 0) * Math.PI / 180.0;
   ctx.rotate(rotate);
+  var stroke = options.stroke || { width: 1, style: '#000' };
+  if (stroke.gradient) {
+    ctx.strokeStyle = buildGradient(ctx, stroke.gradient);
+  } else {
+    ctx.strokeStyle = stroke.style;
+  }
+  ctx.lineWidth = stroke.width;
+  var fill = options.fill || { style: '#000' };
+  if (fill.gradient) {
+    ctx.fillStyle = buildGradient(ctx, fill.gradient);
+  } else {
+    ctx.fillStyle = fill.style;
+  }
 };
 
 var reset = function reset(ctx) {
@@ -38121,15 +38352,23 @@ var reset = function reset(ctx) {
 var normalizePoint = function normalizePoint(point, ctx) {
   var canvas = ctx.canvas;
   var normalized = { x: point.x, y: point.y };
-  if (point.nX) {
+  if (typeof point.nX == 'number') {
     normalized.x = ctx.canvas.width * point.nX * 0.01;
   }
 
-  if (point.nY) {
+  if (typeof point.nY == 'number') {
     normalized.y = ctx.canvas.height * point.nY * 0.01;
   }
 
   return normalized;
+};
+
+var normalizeRadius = function normalizeRadius(options, ctx) {
+  var radius = options.radius;
+  if (options.nRadius) {
+    radius = ctx.canvas.width * options.nRadius / 100.0;
+  }
+  return radius;
 };
 
 var Drawing = {
@@ -38167,10 +38406,7 @@ var Drawing = {
     ctx.beginPath();
     setStyleAttributes(ctx, options);
     var center = normalizePoint(options.center, ctx);
-    var radius = options.radius;
-    if (options.nRadius) {
-      radius = ctx.canvas.width * options.nRadius / 100.0;
-    }
+    var radius = normalizeRadius(options, ctx);
     ctx.arc(center.x, center.y, radius, options.start, options.finish);
     ctx.stroke();
     reset(ctx);
@@ -38180,10 +38416,7 @@ var Drawing = {
     ctx.beginPath();
     setStyleAttributes(ctx, options);
     var center = normalizePoint(options.center, ctx);
-    var radius = options.radius;
-    if (options.nRadius) {
-      radius = ctx.canvas.width * options.nRadius / 100.0;
-    }
+    var radius = normalizeRadius(options, ctx);
     ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
     ctx.stroke();
     reset(ctx);
@@ -38193,10 +38426,7 @@ var Drawing = {
     ctx.beginPath();
     setStyleAttributes(ctx, options);
     var center = normalizePoint(options.center, ctx);
-    var radius = options.radius;
-    if (options.nRadius) {
-      radius = ctx.canvas.width * options.nRadius / 100.0;
-    }
+    var radius = normalizeRadius(options, ctx);
     ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
     ctx.fill();
     reset(ctx);

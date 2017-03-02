@@ -19,16 +19,16 @@ class Clock extends React.Component {
 
     this.state = {
       time: new Date(),
-      style: 'basic'
+      style: 'movado'
     };
   }
 
   componentDidMount() {
     this.interval = setInterval((() => {
       this.setState({
-        time:  new Date()
+        time: new Date()
       })
-    }).bind(this), 1);
+    }).bind(this), 500);
     Drawing.bindDebug($, this.refs.canvas);
   }
 
@@ -394,12 +394,242 @@ class Clock extends React.Component {
   }
 
   renderMovadoClock(data) {
+    // Clock face
+    Drawing.ring(data.ctx, {
+      stroke: {
+        gradient: {
+          type: 'linear',
+          start: { nX: 90.0, nY: 0.0 },
+          finish: { nX: 100, nY: 100 },
+          stops: [
+            { position: 0.0, color: '#fff' },
+            { position: 0.25, color: '#fff' },
+            { position: 0.27, color: '#000' },
+            { position: 0.4, color: '#000' },
+            { position: 0.5, color: '#fff' },
+            { position: 1.0, color: '#fff' }
+          ]
+        },
+        width: 20
+      },
+      shadow: {
+        color: '#000',
+        blur: 3,
+        offset: {
+          x: 0,
+          y: 0
+        }
+      },
+      center: { nX: 50, nY: 50 },
+      nRadius: 25
+    });
+
+    Drawing.disc(data.ctx, {
+      fill: { style: '#000' },
+      center: { nX: 50, nY: 50 },
+      nRadius: 25
+    });
+
+    Drawing.ring(data.ctx, {
+      stroke: {
+        style: '#fff',
+        width: 5
+      },
+      shadow: {
+        color: '#000',
+        blur: 1,
+        offset: {
+          x: 0,
+          y: 0
+        }
+      },
+      center: { nX: 50, nY: 50 },
+      nRadius: 24.7
+    });
+
+    Drawing.disc(data.ctx, {
+      fill: {
+        gradient: {
+          type: 'linear',
+          start: { nX: 90.0, nY: 0.0 },
+          finish: { nX: 100, nY: 100 },
+          stops: [
+            { position: 0.0, color: 'rgba(0,0,0,0)' },
+            { position: 1.0, color: 'rgba(0,0,0,0.3)' }
+          ]
+        },
+      },
+      center: { nX: 50, nY: 50 },
+      nRadius: 26.5
+    });
+
+    Drawing.ring(data.ctx, {
+      stroke: {
+        style: '#fff',
+        width: 3
+      },
+      center: { nX: 50, nY: 19 },
+      nRadius: 2.5
+    });
+
+    Drawing.disc(data.ctx, {
+      fill: {
+        gradient: {
+          type: 'radial',
+          start: {
+            center: { nX: 50.0, nY: 18.0 },
+            nRadius: 2.5
+          },
+          finish: {
+            center: { nX: 50.0, nY: 23.0 },
+            nRadius: 2
+          },
+          stops: [
+            { position: 0.0, color: '#000' },
+            { position: 0.5, color: '#000' },
+            { position: 0.51, color: '#999' },
+            { position: 1.0, color: '#fff' }
+          ]
+        },
+      },
+      center: { nX: 50, nY: 19 },
+      nRadius: 2.5
+    });
+
+    var r, theta, h, b;
+    // hour hand
+    r = data.width * 0.13;
+    h = data.width * 0.01;
+    b = 0.2 * r;
+    theta = (data.hours % 12) * (2 * Math.PI)/12.0 - Math.PI/2.0;
+    Drawing.polygon(data.ctx, {
+      fill: {
+        style: '#aaa',
+      },
+      points: [
+        {
+          x: data.width * 0.5 - b * Math.cos(theta),
+          y: data.height * 0.5 - b * Math.sin(theta)
+        },
+        {
+          x: r * Math.cos(theta) + data.width * 0.5,
+          y: r * Math.sin(theta) + data.height * 0.5
+        },
+        {
+          x: data.width * 0.5 + h * Math.cos(Math.PI/2 + theta) ,
+          y: data.height * 0.5 + h * Math.sin(Math.PI/2 + theta)
+        }
+      ]
+    });
+    Drawing.polygon(data.ctx, {
+      fill: {
+        style: '#efefef',
+      },
+      points: [
+        {
+          x: data.width * 0.5 - b * Math.cos(theta),
+          y: data.height * 0.5 - b * Math.sin(theta)
+        },
+        {
+          x: r * Math.cos(theta) + data.width * 0.5,
+          y: r * Math.sin(theta) + data.height * 0.5
+        },
+        {
+          x: data.width * 0.5 - h * Math.cos(Math.PI/2 + theta),
+          y: data.height * 0.5 - h * Math.sin(Math.PI/2 + theta)
+        }
+      ]
+    });
+    Drawing.line(data.ctx, {
+      stroke: {
+        style: '#fff'
+      },
+      start: {
+        x: data.width * 0.5,
+        y: data.height * 0.5
+      },
+      finish: {
+        x: r * Math.cos(theta) + data.width * 0.5,
+        y: r * Math.sin(theta) + data.height * 0.5
+      }
+    });
+
+    // minute hand
+    r = data.width * 0.20;
+    h = data.width * 0.015;
+    b = 0.1 * r;
+    theta = data.minutes * (2 * Math.PI)/60.0 - Math.PI/2.0;
+    Drawing.polygon(data.ctx, {
+      fill: {
+        style: '#aaa',
+      },
+      points: [
+        {
+          x: data.width * 0.5 - b * Math.cos(theta),
+          y: data.height * 0.5 - b * Math.sin(theta)
+        },
+        {
+          x: r * Math.cos(theta) + data.width * 0.5,
+          y: r * Math.sin(theta) + data.height * 0.5
+        },
+        {
+          x: data.width * 0.5 + h * Math.cos(Math.PI/2 + theta) ,
+          y: data.height * 0.5 + h * Math.sin(Math.PI/2 + theta)
+        }
+      ]
+    });
+    Drawing.polygon(data.ctx, {
+      fill: {
+        style: '#efefef',
+      },
+      points: [
+        {
+          x: data.width * 0.5 - b * Math.cos(theta),
+          y: data.height * 0.5 - b * Math.sin(theta)
+        },
+        {
+          x: r * Math.cos(theta) + data.width * 0.5,
+          y: r * Math.sin(theta) + data.height * 0.5
+        },
+        {
+          x: data.width * 0.5 - h * Math.cos(Math.PI/2 + theta),
+          y: data.height * 0.5 - h * Math.sin(Math.PI/2 + theta)
+        }
+      ]
+    });
+    Drawing.line(data.ctx, {
+      stroke: {
+        style: '#fff'
+      },
+      start: {
+        x: data.width * 0.5,
+        y: data.height * 0.5
+      },
+      finish: {
+        x: r * Math.cos(theta) + data.width * 0.5,
+        y: r * Math.sin(theta) + data.height * 0.5
+      }
+    });
+
+    Drawing.disc(data.ctx, {
+      fill: {
+        gradient: {
+          type: 'linear',
+          start: { nX: 50, nY: 49 },
+          finish: { nX: 50, nY: 51 },
+          stops: [
+            { position: 0.0, color: '#9f9f9f' },
+            { position: 0.5, color: '#999' },
+            { position: 1.0, color: '#333' }
+          ]
+        },
+      },
+      center: { nX: 50, nY: 50 },
+      radius: 3
+    });
 
   }
 
-  renderClassicClock(data) {
-
-  }
 
   setStyleHandler(style) {
     return (() => {
@@ -423,13 +653,17 @@ class Clock extends React.Component {
         <div className='controls col s12'>
           <div className='toggle col s12'>
             <div className='title'>style</div>
-            <div className={'col s6 btn-flat waves-effect ' + (this.state.style == 'basic' ? 'active' : 'inactive')}
+            <div className={'col s6 m4 btn-flat waves-effect ' + (this.state.style == 'basic' ? 'active' : 'inactive')}
                 onClick={this.setStyleHandler('basic')}>
                 basic
             </div>
-            <div className={'col s6 btn-flat waves-effect ' + (this.state.style == 'retro' ? 'active' : 'inactive')}
+            <div className={'col s6 m4 btn-flat waves-effect ' + (this.state.style == 'retro' ? 'active' : 'inactive')}
                 onClick={this.setStyleHandler('retro')}>
                 retro
+            </div>
+            <div className={'col s6 m4 btn-flat waves-effect ' + (this.state.style == 'movado' ? 'active' : 'inactive')}
+                onClick={this.setStyleHandler('movado')}>
+                movado
             </div>
           </div>
         </div>

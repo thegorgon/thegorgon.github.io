@@ -1,10 +1,26 @@
+var buildGradient = (ctx, options) => {
+  var gradient;
+  if (options.type == 'linear') {
+    var start = normalizePoint(options.start, ctx);
+    var finish = normalizePoint(options.finish, ctx);
+    gradient = ctx.createLinearGradient(start.x, start.y, finish.x, finish.y);
+  } else if (options.type == 'radial') {
+    var startCenter = normalizePoint(options.start.center, ctx);
+    var finishCenter = normalizePoint(options.finish.center, ctx);
+    var startRadius = normalizeRadius(options.start, ctx);
+    var finishRadius = normalizeRadius(options.finish, ctx);
+    gradient = ctx.createRadialGradient(startCenter.x, startCenter.y, startRadius, finishCenter.x, finishCenter.y, finishRadius);
+  }
+  if (gradient) {
+    options.stops.forEach((stop) => {
+      gradient.addColorStop(stop.position, stop.color);
+    });
+  }
+  return gradient;
+}
+
 var setStyleAttributes = (ctx, options) => {
-  var stroke = options.stroke || { width: 1, style: '#000' }
-  ctx.strokeStyle = stroke.style;
-  ctx.lineWidth = stroke.width;
   ctx.font = options.font;
-  var fill = options.fill || { style: '#000' }
-  ctx.fillStyle = fill.style;
   var shadow = options.shadow || {
     color: '#333',
     blur: 0,
@@ -16,6 +32,19 @@ var setStyleAttributes = (ctx, options) => {
   ctx.shadowOffsetY = shadow.offset.y;
   var rotate = (options.rotate || 0) * Math.PI/180.0;
   ctx.rotate(rotate);
+  var stroke = options.stroke || { width: 1, style: '#000' }
+  if (stroke.gradient) {
+    ctx.strokeStyle = buildGradient(ctx, stroke.gradient);
+  } else {
+    ctx.strokeStyle = stroke.style;
+  }
+  ctx.lineWidth = stroke.width;
+  var fill = options.fill || { style: '#000' }
+  if (fill.gradient) {
+    ctx.fillStyle = buildGradient(ctx, fill.gradient);
+  } else {
+    ctx.fillStyle = fill.style;
+  }
 };
 
 var reset = (ctx) => {
@@ -25,16 +54,22 @@ var reset = (ctx) => {
 var normalizePoint = (point, ctx) => {
   var canvas = ctx.canvas;
   var normalized = {x: point.x, y: point.y};
-  if (point.nX) {
+  if (typeof(point.nX) == 'number') {
     normalized.x = ctx.canvas.width * point.nX * 0.01;
   }
 
-  if (point.nY) {
+  if (typeof(point.nY) == 'number') {
     normalized.y = ctx.canvas.height * point.nY * 0.01;
   }
 
   return normalized;
 };
+
+var normalizeRadius = (options, ctx) => {
+  var radius = options.radius;
+  if (options.nRadius) { radius = ctx.canvas.width * options.nRadius/100.0; }
+  return radius;
+}
 
 var Drawing = {
   bindDebug: ($, canvas) => {
@@ -71,8 +106,7 @@ var Drawing = {
     ctx.beginPath();
     setStyleAttributes(ctx, options);
     var center = normalizePoint(options.center, ctx);
-    var radius = options.radius;
-    if (options.nRadius) { radius = ctx.canvas.width * options.nRadius/100.0; }
+    var radius = normalizeRadius(options, ctx);
     ctx.arc(
       center.x,
       center.y,
@@ -88,8 +122,7 @@ var Drawing = {
     ctx.beginPath();
     setStyleAttributes(ctx, options);
     var center = normalizePoint(options.center, ctx);
-    var radius = options.radius;
-    if (options.nRadius) { radius = ctx.canvas.width * options.nRadius/100.0; }
+    var radius = normalizeRadius(options, ctx);
     ctx.arc(
       center.x,
       center.y,
@@ -105,8 +138,7 @@ var Drawing = {
     ctx.beginPath();
     setStyleAttributes(ctx, options);
     var center = normalizePoint(options.center, ctx);
-    var radius = options.radius;
-    if (options.nRadius) { radius = ctx.canvas.width * options.nRadius/100.0; }
+    var radius = normalizeRadius(options, ctx);
     ctx.arc(
       center.x,
       center.y,
