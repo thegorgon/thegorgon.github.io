@@ -37782,7 +37782,7 @@ var Clock = function (_React$Component) {
         },
         shadow: {
           color: '#333',
-          nBlur: 0.2,
+          nBlur: 0.5,
           offset: {
             nX: 0.1,
             nY: 0.1
