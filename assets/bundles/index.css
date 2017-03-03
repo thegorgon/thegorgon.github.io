@@ -10998,6 +10998,10 @@ button.picker__close:focus {
   }
 }
 
+.form-btn {
+  margin-top: 1.6rem;
+}
+
 .btn-flat {
   border: 1px solid #eee;
   background-color: white;
@@ -11024,6 +11028,14 @@ button.picker__close:focus {
 .toggle .btn-flat {
   text-align: center;
   margin: 0;
+}
+
+.top-margin {
+  margin-top: 1rem;
+}
+
+.subtext {
+  color: #ccc;
 }
 
 .home .projects .card-content {

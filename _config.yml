@@ -28,6 +28,10 @@ gems:
 # My settings:
 permalink: pretty
 exclude:
+  - Procfile
+  - webpack.config.js
+  - webpack-stats.js
+  - package.json
   - node_modules
   - CNAME
   - Gemfile

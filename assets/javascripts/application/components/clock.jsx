@@ -27,11 +27,11 @@ class Clock extends React.Component {
   }
 
   componentDidMount() {
-    this.interval = setInterval((() => {
+    this.interval = setInterval(() => {
       this.setState({
         time: new Date()
       })
-    }).bind(this), 1);
+    }, 1);
     Drawing.bindDebug($, this.refs.canvas);
   }
 
@@ -57,7 +57,7 @@ class Clock extends React.Component {
       minutes: minutes,
       seconds: seconds
     }
-    data.ctx.clearRect(0, 0, data.width, data.height);
+    Drawing.clear(data.ctx);
 
     switch (this.state.style) {
       case 'basic':
@@ -490,9 +490,9 @@ class Clock extends React.Component {
           },
           stops: [
             { position: 0.0, color: '#000' },
-            { position: 0.5, color: '#000' },
+            { position: 0.35, color: '#111' },
             { position: 0.51, color: '#999' },
-            { position: 1.0, color: '#fff' }
+            { position: 1.0, color: '#efefef' }
           ]
         },
       },
