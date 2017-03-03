@@ -1,12 +1,14 @@
 var React = require('react');
 var $ = require('jquery');
 var Drawing = require('../drawing')
+var Gaussian = require('../gaussian')
 
 class Kmeans extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       observations: [],
+      values: [],
       clusters: [],
       mapping: [],
       running: false,
@@ -14,15 +16,33 @@ class Kmeans extends React.Component {
     };
   }
 
-  generateRandomObservations(count) {
-    var observations = []
-    for (var i = 0; i < count; i++) {
-      observations.push({
-        x: Math.round(Math.random() * this.refs.canvas.width),
-        y: Math.round(Math.random() * this.refs.canvas.height)
+  generateValuesAndObservations(valueCount, observationCount, error) {
+    var observations = [];
+    var values = [];
+    for (var i = 0; i < valueCount; i++) {
+      values.push({
+        x: Math.round(Math.random() * this.refs.canvas.width * 0.8) + this.refs.canvas.width * 0.1,
+        y: Math.round(Math.random() * this.refs.canvas.height * 0.8) + this.refs.canvas.height * 0.1,
+        index: i
       });
     }
-    this.setState({ observations: observations, mapping: [] });
+
+    var value, xGauss, yGauss;
+    for (var i = 0; i < observationCount; i++) {
+      value = values[Math.floor(Math.random() * values.length)];
+      xGauss = new Gaussian(value.x, error * Math.min(value.x, this.refs.canvas.width - value.x));
+      yGauss = new Gaussian(value.y, error * Math.min(value.y, this.refs.canvas.height - value.y));
+      observations.push({
+        x: Math.min(Math.max(xGauss.ppf(Math.random()), 0), this.refs.canvas.width),
+        y: Math.min(Math.max(yGauss.ppf(Math.random()), 0), this.refs.canvas.height),
+        index: i
+      });
+    }
+    this.setState({ values: values, observations: observations, mapping: [] });
+  }
+
+  generateRandomValues(count) {
+    this.setState({ values: values });
   }
 
   generateRandomClusters(count) {
@@ -40,14 +60,28 @@ class Kmeans extends React.Component {
     this.setState({ clusters: clusters, mapping: [] });
   }
 
+  handleObservationAndValueUpdate() {
+    var obsCount = $(this.refs['observation-count']).val();
+    var valCount = $(this.refs['cluster-count']).val();
+    var error = $(this.refs['error-value']).val();
+    this.generateValuesAndObservations(valCount, obsCount, error);
+  }
+
+  handleErrorChange() {
+    this.handleObservationAndValueUpdate();
+  }
+
   handleObservationCountChange() {
-    var count = $(this.refs['observation-count']).val();
-    this.generateRandomObservations(count);
+    this.handleObservationAndValueUpdate
   }
 
   handleClusterCountChange() {
     var count = $(this.refs['cluster-count']).val();
     this.generateRandomClusters(count);
+  }
+
+  handleValueCountChange() {
+    this.handleObservationAndValueUpdate();
   }
 
   handleStart() {
@@ -59,26 +93,27 @@ class Kmeans extends React.Component {
   }
 
   handleStop() {
-    console.log("STOP!");
     clearInterval(this.interval);
     clearTimeout(this.timeout);
     this.setState({ running: false });
   }
 
-  handleReset() {
-    this.handleObservationCountChange();
+  handleResetAll() {
+    this.handleObservationAndValueUpdate();
     this.handleClusterCountChange();
     this.setState({ convergence: null });
   }
 
   iterate() {
-    var mapping = [], reverseMapping = {}, clusters = this.state.clusters;
+    var mapping = [], reverseMapping = [], clusters = this.state.clusters;
     var distanceBetween = function(a, b) {
       return Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
     };
 
     this.state.observations.forEach((observation, index) => {
-      var distanceSortedClusters = clusters.sort((c1, c2) => {
+      // sort sorts in place, so slice(0) to clone
+      // to prevent mixing up the original clusters array.
+      var distanceSortedClusters = clusters.slice(0).sort((c1, c2) => {
         var d1 = distanceBetween(c1, observation);
         var d2 = distanceBetween(c2, observation);
         if (d1 < d2) { return -1; }
@@ -119,16 +154,17 @@ class Kmeans extends React.Component {
     if (this.state.convergence === null) {
       return null;
     } else if (this.state.convergence < 0) {
-      return 'Calculating Convergence...';
+      return 'Calculating Completion...';
     } else if (this.state.convergence <= 1) {
-      return 'Converged!';
+      return 'Completed!';
     } else {
-      return 'Convergence: ' + Math.round(this.state.convergence);
+      var width = this.refs.canvas.width
+      return 'Convergence: ' + Math.floor(100 * (width - this.state.convergence)/width) + '%';
     }
   }
 
   componentDidMount() {
-    this.handleReset();
+    this.handleResetAll();
   }
 
   componentWillUnmount() {
@@ -152,14 +188,24 @@ class Kmeans extends React.Component {
       })
     });
 
-    this.state.clusters.forEach((cluster) => {
+    this.state.values.forEach((cluster) => {
+      Drawing.disc(ctx, {
+        fill: {
+          style: 'rgba(0, 0, 0, 0.2)'
+        },
+        center: {x: cluster.x, y: cluster.y},
+        nRadius: 2
+      })
+    });
+
+    this.state.clusters.forEach((cluster, index) => {
       Drawing.disc(ctx, {
         fill: {
           style: 'hsl(' + cluster.hue + ', 100%, 40%)'
         },
         center: {x: cluster.x, y: cluster.y},
         nRadius: 1
-      })
+      });
     });
   }
 
@@ -168,22 +214,22 @@ class Kmeans extends React.Component {
       <div className='row kmeans'>
         <canvas className='col s8 offset-s2' height='1000' width='1618' ref='canvas'></canvas>
         <div className='top-margin controls col s8 offset-s2'>
-          <div className='col center-align s6 l3'>
+          <div className='col center-align s3'>
             <label htmlFor='observation-count'>Observations:</label>
             <select
                 className='browser-default'
                 name='observation-count'
                 ref='observation-count'
                 onChange={this.handleObservationCountChange.bind(this)}
-                defaultValue='100'
+                defaultValue='1000'
                 disabled={this.state.running}>
-              <option value='10'>10</option>
               <option value='100'>100</option>
               <option value='1000'>1,000</option>
+              <option value='5000'>5,000</option>
               <option value='10000'>10,000</option>
             </select>
           </div>
-          <div className='col center-align s6 l3'>
+          <div className='col center-align s3'>
             <label htmlFor='cluster-count'>Clusters:</label>
             <select
                 className='browser-default'
@@ -198,7 +244,39 @@ class Kmeans extends React.Component {
               <option value='20'>20</option>
             </select>
           </div>
-          <div className='col center-align s4 l2'>
+          <div className='col center-align s3'>
+            <label htmlFor='cluster-count'>Values:</label>
+            <select
+                className='browser-default'
+                name='value-count'
+                ref='value-count'
+                onChange={this.handleValueCountChange.bind(this)}
+                defaultValue='5'
+                disabled={this.state.running}>
+              <option value='2'>2</option>
+              <option value='5'>5</option>
+              <option value='10'>10</option>
+              <option value='20'>20</option>
+            </select>
+          </div>
+          <div className='col center-align s3'>
+            <label htmlFor='cluster-count'>Error:</label>
+            <select
+                className='browser-default'
+                name='error-value'
+                ref='error-value'
+                onChange={this.handleErrorChange.bind(this)}
+                defaultValue='75'
+                disabled={this.state.running}>
+              <option value='0'>0</option>
+              <option value='10'>10</option>
+              <option value='50'>50</option>
+              <option value='75'>75</option>
+              <option value='100'>100</option>
+              <option value='200'>200</option>
+            </select>
+          </div>
+          <div className='col center-align s6 m3'>
             <a
                 className='btn-flat waves-effect form-btn'
                 onClick={this.handleStart.bind(this)}
@@ -206,15 +284,23 @@ class Kmeans extends React.Component {
               <i className="material-icons">play_arrow</i>
             </a>
           </div>
-          <div className='col center-align s4 l2'>
+          <div className='col center-align s6 m3'>
             <a
                 className='btn-flat waves-effect form-btn'
-                onClick={this.handleReset.bind(this)}
+                onClick={this.handleClusterCountChange.bind(this)}
+                disabled={this.state.running}>
+              <i className="material-icons">fast_rewind</i>
+            </a>
+          </div>
+          <div className='col center-align s6 m3'>
+            <a
+                className='btn-flat waves-effect form-btn'
+                onClick={this.handleResetAll.bind(this)}
                 disabled={this.state.running}>
               <i className="material-icons">replay</i>
             </a>
           </div>
-          <div className='col center-align s4 l2'>
+          <div className='col center-align s6 m3'>
             <a
                 className='btn-flat waves-effect form-btn'
                 onClick={this.handleStop.bind(this)}
