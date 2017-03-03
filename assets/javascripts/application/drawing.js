@@ -103,6 +103,10 @@ var Drawing = {
     }));
   },
 
+  clear: (ctx) => {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  },
+
   text: (ctx, options) => {
     setStyleAttributes(ctx, options);
     var position = normalizePoint(options.position, ctx);

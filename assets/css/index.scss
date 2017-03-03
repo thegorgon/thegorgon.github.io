@@ -17,6 +17,10 @@ $chip-selected-color: $secondary-color !default;
 
 @import '~materialize-css/sass/materialize';
 
+.form-btn {
+  margin-top: 1.6rem;
+}
+
 .btn-flat {
   border: 1px solid #eee;
   background-color: white;
@@ -42,6 +46,14 @@ $chip-selected-color: $secondary-color !default;
     text-align: center;
     margin: 0;
   }
+}
+
+.top-margin {
+  margin-top: 1rem;
+}
+
+.subtext {
+  color: #ccc;
 }
 
 .home {
