@@ -301,7 +301,7 @@ class Clock extends React.Component {
       fill: {
         style: 'rgba(0,0,255,0.7)'
       },
-      font: '100 small-caps 18px "Trebuchet MS", Helvetica, sans-serif',
+      font: '100 small-caps 36px "Trebuchet MS", Helvetica, sans-serif',
       text: 'swiss',
       position: { nX: 67.5, nY: 51.5}
     })
@@ -652,7 +652,7 @@ class Clock extends React.Component {
           <span className='divider'>:</span>
           <span className='seconds'>{this.state.time.getSeconds().lpad(2)}</span>
         </div>
-        <canvas className='col s8 offset-s2' height='1000' width='1618' ref='canvas'></canvas>
+        <canvas className='col s12 l10 offset-l1' height='2000' width='3236' ref='canvas'></canvas>
         <div className='controls col s12'>
           <div className='toggle col s12'>
             <div className='title'>style</div>

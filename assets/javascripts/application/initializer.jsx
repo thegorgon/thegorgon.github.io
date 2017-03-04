@@ -3,6 +3,7 @@ var ReactDOM = require('react-dom');
 
 var Clock = require('./components/clock')
 var Kmeans = require('./components/kmeans')
+var Swarm = require('./components/swarm')
 
 var node = document.getElementById('application');
 
@@ -17,9 +18,10 @@ var Initializer = {
     },
     swarm: function() {
       console.log('Initializing swarm.');
+      ReactDOM.render(<Swarm />, node);
     },
     clock: function() {
-      console.log('Initializing Clock');
+      console.log('Initializing clock');
       ReactDOM.render(<Clock />, node);
     },
   }

@@ -19,6 +19,22 @@ var buildGradient = (ctx, options) => {
   return gradient;
 }
 
+var polygon = (ctx, options) => {
+  setStyleAttributes(ctx, options);
+  var points = options.points.map((point) => {
+    return normalizePoint(point, ctx);
+  });
+  var start = points[0];
+  ctx.beginPath();
+  ctx.moveTo(start.x, start.y);
+  points.slice(1).forEach((point) => {
+    ctx.lineTo(point.x, point.y);
+  });
+  ctx.closePath();
+  ctx.fill();
+  reset(ctx);
+}
+
 var setStyleAttributes = (ctx, options) => {
   ctx.font = options.font;
   var shadow = options.shadow || {
@@ -80,7 +96,7 @@ var normalizeWidth = (options, ctx) => {
 
 var normalizeHeight = (options, ctx) => {
   var height = options.height;
-  if (options.nHeight) { width = ctx.canvas.height * options.nHeight/100.0; }
+  if (options.nHeight) { height = ctx.canvas.height * options.nHeight/100.0; }
   return height;
 }
 
@@ -141,6 +157,34 @@ var Drawing = {
     reset(ctx);
   },
 
+  sector: (ctx, options) => {
+    ctx.beginPath();
+    setStyleAttributes(ctx, options);
+    var center = normalizePoint(options.center, ctx);
+    var radius = normalizeRadius(options, ctx);
+    var startPt = {
+      x: center.x + radius * Math.cos(options.start),
+      y: center.y + radius * Math.sin(options.start)
+    };
+    var endPt = {
+      x: center.x + radius * Math.cos(options.finish),
+      y: center.y + radius * Math.sin(options.finish)
+    };
+    ctx.moveTo(center.x, center.y);
+    ctx.lineTo(startPt.x, startPt.y);
+    ctx.arc(
+      center.x,
+      center.y,
+      radius,
+      options.start,
+      options.finish
+    );
+    ctx.moveTo(endPt.x, endPt.y);
+    ctx.lineTo(center.x, center.y);
+    ctx.fill();
+    reset(ctx);
+  },
+
   ring: (ctx, options) => {
     ctx.beginPath();
     setStyleAttributes(ctx, options);
@@ -190,6 +234,21 @@ var Drawing = {
     reset(ctx);
   },
 
+  triangle: (ctx, options) => {
+    var center = normalizePoint(options.center, ctx);
+    var width = normalizeWidth(options, ctx);
+    var height = normalizeHeight(options, ctx);
+    var x = center.x, y = center.y, theta = options.heading + Math.PI/2.0, h = height * 0.5, w = width * 0.5;
+
+    polygon(ctx, Object.assign({}, {
+      points: [
+        { x: x + h * Math.sin(theta), y: y - h * Math.cos(theta) },
+        { x: x - h * Math.sin(theta) - w * Math.cos(theta), y: y + h * Math.cos(theta) - w * Math.sin(theta) },
+        { x: x - h * Math.sin(theta) + w * Math.cos(theta), y: y + h * Math.cos(theta) + w * Math.sin(theta) }
+      ]
+    }, options));
+  },
+
   rectangle: (ctx, options) => {
     setStyleAttributes(ctx, options);
     var start = normalizePoint(options.start, ctx);
@@ -210,19 +269,7 @@ var Drawing = {
   },
 
   polygon: (ctx, options) => {
-    setStyleAttributes(ctx, options);
-    var points = options.points.map((point) => {
-      return normalizePoint(point, ctx);
-    });
-    var start = points[0];
-    ctx.beginPath();
-    ctx.moveTo(start.x, start.y);
-    points.slice(1).forEach((point) => {
-      ctx.lineTo(point.x, point.y);
-    });
-    ctx.closePath();
-    ctx.fill();
-    reset(ctx);
+    polygon(ctx, options)
   }
 }
 

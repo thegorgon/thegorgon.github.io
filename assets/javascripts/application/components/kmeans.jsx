@@ -2,6 +2,7 @@ var React = require('react');
 var $ = require('jquery');
 var Drawing = require('../drawing')
 var Gaussian = require('../gaussian')
+var Geometry = require('../geometry')
 
 class Kmeans extends React.Component {
   constructor(props) {
@@ -106,21 +107,11 @@ class Kmeans extends React.Component {
 
   iterate() {
     var mapping = [], reverseMapping = [], clusters = this.state.clusters;
-    var distanceBetween = function(a, b) {
-      return Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
-    };
 
     this.state.observations.forEach((observation, index) => {
       // sort sorts in place, so slice(0) to clone
       // to prevent mixing up the original clusters array.
-      var distanceSortedClusters = clusters.slice(0).sort((c1, c2) => {
-        var d1 = distanceBetween(c1, observation);
-        var d2 = distanceBetween(c2, observation);
-        if (d1 < d2) { return -1; }
-        else if (d1 > d2) { return 1; }
-        else { return 0; }
-      });
-      var closestCluster = distanceSortedClusters[0];
+      var closestCluster = Geometry.nearest(observation, clusters);
       mapping[index] = closestCluster;
       reverseMapping[closestCluster.index] = reverseMapping[closestCluster.index] || [];
       reverseMapping[closestCluster.index].push(observation);
@@ -131,12 +122,7 @@ class Kmeans extends React.Component {
       var centroid, observations, distanceTraveled = 0;
       var newClusters = clusters.map((cluster, index) => {
         observations = reverseMapping[index] || [];
-        centroid = observations.reduce((acc, observation) => {
-          return {
-            x: acc.x + observation.x / (1.0 * observations.length),
-            y: acc.y + observation.y / (1.0 * observations.length)
-          }
-        }, { x: 0.0, y: 0.0 });
+        centroid = Geometry.centroid(observations);
         distanceTraveled += distanceBetween(cluster, centroid);
         return Object.assign({}, cluster, centroid);
       });
@@ -212,7 +198,7 @@ class Kmeans extends React.Component {
   render() {
     return (
       <div className='row kmeans'>
-        <canvas className='col s8 offset-s2' height='1000' width='1618' ref='canvas'></canvas>
+        <canvas className='col s12 l10 offset-l1' height='2000' width='3236' ref='canvas'></canvas>
         <div className='spacer subtext col s8 offset-s2 center'>{this.getSubtext()}</div>
         <div className='top-margin controls col s8 offset-s2'>
           <div className='col center-align s3'>
