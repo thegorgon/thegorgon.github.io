@@ -11034,6 +11034,11 @@ button.picker__close:focus {
   margin-top: 1rem;
 }
 
+.spacer {
+  height: 1.5rem;
+  line-height: 1.5rem;
+}
+
 .subtext {
   color: #ccc;
 }

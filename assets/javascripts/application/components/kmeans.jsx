@@ -62,7 +62,7 @@ class Kmeans extends React.Component {
 
   handleObservationAndValueUpdate() {
     var obsCount = $(this.refs['observation-count']).val();
-    var valCount = $(this.refs['cluster-count']).val();
+    var valCount = $(this.refs['value-count']).val();
     var error = $(this.refs['error-value']).val();
     this.generateValuesAndObservations(valCount, obsCount, error);
   }
@@ -213,6 +213,7 @@ class Kmeans extends React.Component {
     return (
       <div className='row kmeans'>
         <canvas className='col s8 offset-s2' height='1000' width='1618' ref='canvas'></canvas>
+        <div className='spacer subtext col s8 offset-s2 center'>{this.getSubtext()}</div>
         <div className='top-margin controls col s8 offset-s2'>
           <div className='col center-align s3'>
             <label htmlFor='observation-count'>Observations:</label>
@@ -309,7 +310,6 @@ class Kmeans extends React.Component {
             </a>
           </div>
         </div>
-        <div className='top-margin subtext col s8 offset-s2 center'>{this.getSubtext()}</div>
       </div>
     )
   }

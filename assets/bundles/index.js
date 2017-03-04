@@ -38605,7 +38605,7 @@ var Kmeans = function (_React$Component) {
     key: 'handleObservationAndValueUpdate',
     value: function handleObservationAndValueUpdate() {
       var obsCount = $(this.refs['observation-count']).val();
-      var valCount = $(this.refs['cluster-count']).val();
+      var valCount = $(this.refs['value-count']).val();
       var error = $(this.refs['error-value']).val();
       this.generateValuesAndObservations(valCount, obsCount, error);
     }
@@ -38785,6 +38785,11 @@ var Kmeans = function (_React$Component) {
         'div',
         { className: 'row kmeans' },
         React.createElement('canvas', { className: 'col s8 offset-s2', height: '1000', width: '1618', ref: 'canvas' }),
+        React.createElement(
+          'div',
+          { className: 'spacer subtext col s8 offset-s2 center' },
+          this.getSubtext()
+        ),
         React.createElement(
           'div',
           { className: 'top-margin controls col s8 offset-s2' },
@@ -39018,11 +39023,6 @@ var Kmeans = function (_React$Component) {
               )
             )
           )
-        ),
-        React.createElement(
-          'div',
-          { className: 'top-margin subtext col s8 offset-s2 center' },
-          this.getSubtext()
         )
       );
     }
