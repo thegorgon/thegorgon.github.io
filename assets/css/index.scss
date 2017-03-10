@@ -17,8 +17,16 @@ $chip-selected-color: $secondary-color !default;
 
 @import '~materialize-css/sass/materialize';
 
+a.normal {
+  @extend .black-text;
+}
+
 .form-btn {
   margin-top: 1.6rem;
+}
+
+.explanation {
+  margin: 1rem auto 10rem auto;
 }
 
 .btn-flat {

@@ -73,7 +73,7 @@ class Kmeans extends React.Component {
   }
 
   handleObservationCountChange() {
-    this.handleObservationAndValueUpdate
+    this.handleObservationAndValueUpdate();
   }
 
   handleClusterCountChange() {
@@ -123,7 +123,7 @@ class Kmeans extends React.Component {
       var newClusters = clusters.map((cluster, index) => {
         observations = reverseMapping[index] || [];
         centroid = Geometry.centroid(observations);
-        distanceTraveled += distanceBetween(cluster, centroid);
+        distanceTraveled += Geometry.distanceBetween(cluster, centroid);
         return Object.assign({}, cluster, centroid);
       });
 
@@ -188,6 +188,14 @@ class Kmeans extends React.Component {
       Drawing.disc(ctx, {
         fill: {
           style: 'hsl(' + cluster.hue + ', 100%, 40%)'
+        },
+        center: {x: cluster.x, y: cluster.y},
+        nRadius: 1
+      });
+      Drawing.ring(ctx, {
+        stroke: {
+          style: '#333',
+          width: 3
         },
         center: {x: cluster.x, y: cluster.y},
         nRadius: 1

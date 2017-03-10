@@ -66,8 +66,6 @@ class Clock extends React.Component {
         this.renderRetroClock(data); break;
       case 'movado':
         this.renderMovadoClock(data); break;
-      case 'classic':
-        this.renderClassicClock(data); break;
       default:
         console.log('ERROR: INVALID STYLE ', this.state.style);
     }
@@ -629,7 +627,7 @@ class Clock extends React.Component {
         },
       },
       center: { nX: 50, nY: 50 },
-      radius: 3
+      nRadius: 0.3
     });
   }
 

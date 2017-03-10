@@ -2114,7 +2114,8 @@
   background-color: #000000 !important;
 }
 
-.black-text {
+.black-text,
+a.normal {
   color: #000000 !important;
 }
 
@@ -4250,7 +4251,8 @@
   background-color: #000000 !important;
 }
 
-.black-text {
+.black-text,
+a.normal {
   color: #000000 !important;
 }
 
@@ -11000,6 +11002,10 @@ button.picker__close:focus {
 
 .form-btn {
   margin-top: 1.6rem;
+}
+
+.explanation {
+  margin: 1rem auto 10rem auto;
 }
 
 .btn-flat {
