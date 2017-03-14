@@ -12,8 +12,10 @@ The swarm members, rendered as little triangles, travel generally at a consisten
 2. **Alignment**: Try to fly with your visible neighbors, steering towards the average heading of visible neighbors in your wider "alignment zone". Swarm members following this rule render as a <strong style="color: #2C5640">dark green</strong>.
 3. **Cohesion**: Try to fly towards your other flock mates, steering towards the centroid of visible neighbors in your broad "attraction zone". Swarm members following this rule render as a <strong style="color: #1BE6EF">light blue</strong>.
 
-To see the visibility zones rendered, change the "Draw Zones" heading to "yes".
-
 The result is a swarm pattern similar to that of a school of fish. The swarm forms into small groups of tightly packed members, who stay a steady distance apart. When these groups come into contact with each other, they either combine if their contact is gentle, or disrupt each other and form new groups. Over time, the end result is generally a single swarm or two, swimming in a constant direction.
 
+I've also made it so you can play with the angular visibility range with the "Visibility" control. This allows you to change at what angle the swarm member can see it's neighbors. You can see these visibility zones rendered by changing the "Draw Zones" heading to "yes". At different angular visibility ranges, the swarm pattern evolves differently, demonstrating how small variations in these local rules can result in wide variations in global patterns.
+
 To introduce "predators" and disturb the swarm, click on the canvas. The swarm will behave as though a predator is at that location for a half-second, disrupting any grouped swarms and emulating the behavior of tapping the glass on a fish tank.
+
+Hope you enjoy!
