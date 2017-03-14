@@ -12,7 +12,7 @@ The swarm members, rendered as little triangles, travel generally at a consisten
 2. **Alignment**: Try to fly with your visible neighbors, steering towards the average heading of visible neighbors in your wider "alignment zone". Swarm members following this rule render as a <strong style="color: #2C5640">dark green</strong>.
 3. **Cohesion**: Try to fly towards your other flock mates, steering towards the centroid of visible neighbors in your broad "attraction zone". Swarm members following this rule render as a <strong style="color: #1BE6EF">light blue</strong>.
 
-To see the visibility zones rendered, change the "Draw Zones" heading to "true".
+To see the visibility zones rendered, change the "Draw Zones" heading to "yes".
 
 The result is a swarm pattern similar to that of a school of fish. The swarm forms into small groups of tightly packed members, who stay a steady distance apart. When these groups come into contact with each other, they either combine if their contact is gentle, or disrupt each other and form new groups. Over time, the end result is generally a single swarm or two, swimming in a constant direction.
 

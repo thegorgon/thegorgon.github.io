@@ -39357,15 +39357,7 @@ var Swarm = function (_React$Component) {
   }, {
     key: 'calculateNewHeading',
     value: function calculateNewHeading(curHeading, desiredHeading, rotationalSpeed) {
-      var invertedDesired = desiredHeading - 2 * Math.PI,
-          newHeading;
-
-      // if (Math.abs(invertedDesired - curHeading) < Math.abs(desiredHeading - curHeading)) {
-      //   // Shorter to turn clockwise
-      //   desiredHeading = invertedDesired;
-      // }
-      newHeading = curHeading + Math.sign(desiredHeading - curHeading) * Math.min(rotationalSpeed, Math.abs(desiredHeading - curHeading));
-      return newHeading;
+      return curHeading + Math.sign(desiredHeading - curHeading) * Math.min(rotationalSpeed, Math.abs(desiredHeading - curHeading));
     }
   }, {
     key: 'wrapPosition',
@@ -39404,7 +39396,7 @@ var Swarm = function (_React$Component) {
         } else if (destination.y < boundaries.min * height) {
           desiredHeading = Math.PI / 2.0; // Top
         } else if (destination.y > boundaries.max * height) {
-          desiredHeading = -1 * Math.PI / 2.0; // Bottom
+          desiredHeading = 3 * Math.PI / 2.0; // Bottom
         }
         destination.desiredHeading == desiredHeading;
         if (this.state.wallResponse == 'avoid') {
