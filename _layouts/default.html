@@ -16,9 +16,11 @@
   <body>
     <div class="container">
       <header class="row">
-        <h1>the gorgon lab</h1>
-        {% if page.title %}<h3>{{ page.title }}</h3>{% endif %}
-        {% if page.subtitle %}<h5>{{ page.subtitle }}</h5>{% endif %}
+        <a class="normal" href="/">
+          <h1>the gorgon lab</h1>
+          {% if page.title %}<h3>{{ page.title }}</h3>{% endif %}
+          {% if page.subtitle %}<h5>{{ page.subtitle }}</h5>{% endif %}
+        </a>
       </header>
       {{ content }}
     </div>
