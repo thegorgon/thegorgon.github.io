@@ -27099,7 +27099,12 @@ var Geometry = {
   },
   withinAngle: function withinAngle(point, array, angle) {
     return array.filter(function (other) {
-      return Math.abs(heading(point, other)) <= point.heading + angle;
+      return Math.abs(heading(point, other)) <= angle;
+    });
+  },
+  withinAngleAndDistance: function withinAngleAndDistance(point, array, angle, distance) {
+    return array.filter(function (other) {
+      return Math.abs(heading(point, other)) <= angle && distanceBetween(point, other) <= distance;
     });
   },
   forward: function forward(point, distance) {
@@ -39224,8 +39229,7 @@ var Swarm = function (_React$Component) {
       drawZones: false,
       swarmSize: 200,
       speed: 5,
-      wallResponse: 'wrap',
-      angularVisibility: Math.PI,
+      angularVisibility: Math.PI / 2.0,
       repulsionRadius: 50,
       alignmentRadius: 100,
       attractionRadius: 500,
@@ -39263,10 +39267,10 @@ var Swarm = function (_React$Component) {
       });
     }
   }, {
-    key: 'handleWallResponseChange',
-    value: function handleWallResponseChange() {
+    key: 'handleVisibilityChange',
+    value: function handleVisibilityChange() {
       this.setState({
-        wallResponse: $(this.refs['wall-response']).val()
+        angularVisibility: parseFloat($(this.refs['angular-visibility']).val())
       });
     }
   }, {
@@ -39314,8 +39318,8 @@ var Swarm = function (_React$Component) {
           speed;
       this.state.swarmers.forEach(function (swarmer, index) {
         others = _this2.state.swarmers.slice(0, index).concat(_this2.state.swarmers.slice(index + 1, _this2.state.swarmers.length));
-        visible = others; //Geometry.withinAngle(swarmer, others, this.state.angularVisibility);
-        visiblePredators = Geometry.within(swarmer, _this2.state.predators, _this2.state.predatorRadius);
+        visible = Geometry.withinAngle(swarmer, others, _this2.state.angularVisibility);
+        visiblePredators = Geometry.withinAngleAndDistance(swarmer, _this2.state.predators, _this2.state.angularVisibility, _this2.state.predatorRadius);
         speed = _this2.state.speed;
         rotationalSpeed = 0.005 * Math.PI * speed;
         desiredHeading = swarmer.heading;
@@ -39364,46 +39368,17 @@ var Swarm = function (_React$Component) {
     value: function wrapPosition(destination, rotationalSpeed) {
       var width = this.refs.canvas.width,
           height = this.refs.canvas.height;
-      if (this.state.wallResponse == 'wrap') {
-        if (destination.x < 0) {
-          destination.x = width;
-        }
-        if (destination.x > width) {
-          destination.x = 0;
-        }
-        if (destination.y < 0) {
-          destination.y = height;
-        }
-        if (destination.y > height) {
-          destination.y = 0;
-        }
-      } else if (this.state.wallResponse == 'bounce' || this.state.wallResponse == 'avoid') {
-        var desiredHeading = destination.heading,
-            heading = destination.heading;
-        var boundaries = this.state.wallResponse == 'bounce' ? { min: 0, max: 1 } : { min: 0.1, max: 0.9 };
-        if (destination.x < boundaries.min * width && destination.y < boundaries.min * height) {
-          desiredHeading = 1 * Math.PI / 4.0; // Top left corner
-        } else if (destination.x > boundaries.max * width && destination.y < boundaries.min * height) {
-          desiredHeading = 3 * Math.PI / 4.0; // Top right corner
-        } else if (destination.x > boundaries.max * width && destination.y > boundaries.max * height) {
-          desiredHeading = -3 * Math.PI / 4.0; // Bottom right corner
-        } else if (destination.x < boundaries.min * width && destination.y > boundaries.max * height) {
-          desiredHeading = -1 * Math.PI / 4.0; // Bottom left corner
-        } else if (destination.x < boundaries.min * width) {
-          desiredHeading = 0; // Left
-        } else if (destination.x > boundaries.max * width) {
-          desiredHeading = Math.PI; // Right
-        } else if (destination.y < boundaries.min * height) {
-          desiredHeading = Math.PI / 2.0; // Top
-        } else if (destination.y > boundaries.max * height) {
-          desiredHeading = 3 * Math.PI / 2.0; // Bottom
-        }
-        destination.desiredHeading == desiredHeading;
-        if (this.state.wallResponse == 'avoid') {
-          destination.heading = this.calculateNewHeading(heading, desiredHeading, Math.abs(heading - desiredHeading) / 50.0);
-        } else {
-          destination.heading = desiredHeading;
-        }
+      if (destination.x < 0) {
+        destination.x = width;
+      }
+      if (destination.x > width) {
+        destination.x = 0;
+      }
+      if (destination.y < 0) {
+        destination.y = height;
+      }
+      if (destination.y > height) {
+        destination.y = 0;
       }
       return destination;
     }
@@ -39557,24 +39532,39 @@ var Swarm = function (_React$Component) {
             React.createElement(
               'label',
               { htmlFor: 'observation-count' },
-              'Wall Response:'
+              'Visibility:'
             ),
             React.createElement(
               'select',
               { className: 'browser-default',
-                name: 'wall-response',
-                ref: 'wall-response',
-                onChange: this.handleWallResponseChange.bind(this),
-                defaultValue: this.state.wallResponse },
+                name: 'angular-visibility',
+                ref: 'angular-visibility',
+                onChange: this.handleVisibilityChange.bind(this),
+                defaultValue: this.state.angularVisibility },
               React.createElement(
                 'option',
-                { value: 'wrap' },
-                'wrap'
+                { value: 0 },
+                'none'
               ),
               React.createElement(
                 'option',
-                { value: 'bounce' },
-                'bounce'
+                { value: Math.PI / 4.0 },
+                'narrow'
+              ),
+              React.createElement(
+                'option',
+                { value: Math.PI / 2.0 },
+                'forward'
+              ),
+              React.createElement(
+                'option',
+                { value: 3 * Math.PI / 4.0 },
+                'wide'
+              ),
+              React.createElement(
+                'option',
+                { value: Math.PI },
+                'full'
               )
             )
           ),

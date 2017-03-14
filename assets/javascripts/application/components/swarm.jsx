@@ -14,8 +14,7 @@ class Swarm extends React.Component {
       drawZones: false,
       swarmSize: 200,
       speed: 5,
-      wallResponse: 'wrap',
-      angularVisibility: Math.PI,
+      angularVisibility: Math.PI/2.0,
       repulsionRadius: 50,
       alignmentRadius: 100,
       attractionRadius: 500,
@@ -48,10 +47,10 @@ class Swarm extends React.Component {
     });
   }
 
-  handleWallResponseChange() {
+  handleVisibilityChange() {
     this.setState({
-      wallResponse: $(this.refs['wall-response']).val()
-    })
+      angularVisibility: parseFloat($(this.refs['angular-visibility']).val())
+    });
   }
 
   handleClick(event) {
@@ -80,8 +79,8 @@ class Swarm extends React.Component {
     var swarmers = [], others, visible, visibleSwarm, repulsionSwarm, alignmentSwarm, attractionSwarm, desiredHeading, heading, destination, visiblePredators, color, rotationalSpeed, speed;
     this.state.swarmers.forEach((swarmer, index) => {
       others = this.state.swarmers.slice(0, index).concat(this.state.swarmers.slice(index + 1, this.state.swarmers.length));
-      visible = others; //Geometry.withinAngle(swarmer, others, this.state.angularVisibility);
-      visiblePredators = Geometry.within(swarmer, this.state.predators, this.state.predatorRadius);
+      visible = Geometry.withinAngle(swarmer, others, this.state.angularVisibility);
+      visiblePredators = Geometry.withinAngleAndDistance(swarmer, this.state.predators, this.state.angularVisibility, this.state.predatorRadius);
       speed = this.state.speed;
       rotationalSpeed = 0.005 * Math.PI * speed;
       desiredHeading = swarmer.heading;
@@ -127,45 +126,17 @@ class Swarm extends React.Component {
 
   wrapPosition(destination, rotationalSpeed) {
     var width = this.refs.canvas.width, height = this.refs.canvas.height;
-    if (this.state.wallResponse == 'wrap') {
-      if (destination.x < 0) {
-        destination.x = width;
-      }
-      if (destination.x > width) {
-        destination.x = 0;
-      }
-      if (destination.y < 0) {
-        destination.y = height;
-      }
-      if (destination.y > height) {
-        destination.y = 0;
-      }
-    } else if (this.state.wallResponse == 'bounce' || this.state.wallResponse == 'avoid') {
-      var desiredHeading = destination.heading, heading = destination.heading;
-      var boundaries = this.state.wallResponse == 'bounce' ? { min: 0, max: 1 } : { min: 0.1, max: 0.9 };
-      if (destination.x < boundaries.min * width && destination.y < boundaries.min * height) {
-        desiredHeading = 1 * Math.PI/4.0; // Top left corner
-      } else if (destination.x > boundaries.max * width && destination.y < boundaries.min * height) {
-        desiredHeading = 3 * Math.PI/4.0; // Top right corner
-      } else if (destination.x > boundaries.max * width && destination.y > boundaries.max * height) {
-        desiredHeading = -3 * Math.PI/4.0; // Bottom right corner
-      } else if (destination.x < boundaries.min * width && destination.y > boundaries.max * height) {
-        desiredHeading = -1 * Math.PI/4.0; // Bottom left corner
-      } else if (destination.x < boundaries.min * width) {
-        desiredHeading = 0; // Left
-      } else if (destination.x > boundaries.max * width) {
-        desiredHeading = Math.PI; // Right
-      } else if (destination.y < boundaries.min * height) {
-        desiredHeading = Math.PI/2.0; // Top
-      } else if (destination.y > boundaries.max * height) {
-        desiredHeading = 3 * Math.PI/2.0; // Bottom
-      }
-      destination.desiredHeading == desiredHeading;
-      if (this.state.wallResponse == 'avoid') {
-        destination.heading = this.calculateNewHeading(heading, desiredHeading, Math.abs(heading - desiredHeading)/50.0);
-      } else {
-        destination.heading = desiredHeading;
-      }
+    if (destination.x < 0) {
+      destination.x = width;
+    }
+    if (destination.x > width) {
+      destination.x = 0;
+    }
+    if (destination.y < 0) {
+      destination.y = height;
+    }
+    if (destination.y > height) {
+      destination.y = 0;
     }
     return destination;
   }
@@ -255,14 +226,17 @@ class Swarm extends React.Component {
             </select>
           </div>
           <div className='col center-align s4'>
-            <label htmlFor='observation-count'>Wall Response:</label>
+            <label htmlFor='observation-count'>Visibility:</label>
             <select className='browser-default'
-                name='wall-response'
-                ref='wall-response'
-                onChange={this.handleWallResponseChange.bind(this)}
-                defaultValue={this.state.wallResponse}>
-              <option value='wrap'>wrap</option>
-              <option value='bounce'>bounce</option>
+                name='angular-visibility'
+                ref='angular-visibility'
+                onChange={this.handleVisibilityChange.bind(this)}
+                defaultValue={this.state.angularVisibility}>
+              <option value={0}>none</option>
+              <option value={Math.PI/4.0}>narrow</option>
+              <option value={Math.PI/2.0}>forward</option>
+              <option value={3*Math.PI/4.0}>wide</option>
+              <option value={Math.PI}>full</option>
             </select>
           </div>
           <div className='col center-align s4'>

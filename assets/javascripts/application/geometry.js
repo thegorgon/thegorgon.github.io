@@ -55,7 +55,12 @@ var Geometry = {
   },
   withinAngle: (point, array, angle) => {
     return array.filter((other) => {
-      return Math.abs(heading(point, other)) <= point.heading + angle;
+      return Math.abs(heading(point, other)) <= angle;
+    });
+  },
+  withinAngleAndDistance: (point, array, angle, distance) => {
+    return array.filter((other) => {
+      return Math.abs(heading(point, other)) <= angle && distanceBetween(point, other) <= distance;
     });
   },
   forward: (point, distance) => {
