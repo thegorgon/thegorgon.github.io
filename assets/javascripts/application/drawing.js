@@ -69,6 +69,7 @@ var reset = (ctx) => {
 };
 
 var normalizePoint = (point, ctx) => {
+  if (!point) { return null; }
   var canvas = ctx.canvas;
   var normalized = {x: point.x, y: point.y};
   if (typeof(point.nX) == 'number') {
@@ -270,6 +271,27 @@ var Drawing = {
 
   polygon: (ctx, options) => {
     polygon(ctx, options)
+  },
+
+  image: (ctx, options) => {
+    var start = normalizePoint(options.start, ctx);
+    var finish = normalizePoint(options.finish, ctx);
+    var width = normalizeWidth(options, ctx);
+    var height = normalizeHeight(options, ctx);
+    if (options.finish) {
+      width = finish.x - start.x;
+      height = finish.y - start.y;
+    }
+    var image = new Image(width, height);
+    image.src = options.src;
+    debugger;
+    ctx.drawImage(
+      image,
+      start.x,
+      start.y,
+      width,
+      height
+    )
   }
 }
 

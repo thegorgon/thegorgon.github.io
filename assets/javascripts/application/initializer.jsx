@@ -4,6 +4,7 @@ var ReactDOM = require('react-dom');
 var Clock = require('./components/clock')
 var Kmeans = require('./components/kmeans')
 var Swarm = require('./components/swarm')
+var Orbit = require('./components/orbit')
 
 var node = document.getElementById('application');
 
@@ -15,6 +16,7 @@ var Initializer = {
     },
     orbit: function() {
       console.log('Initializing orbit');
+      ReactDOM.render(<Orbit />, node);
     },
     swarm: function() {
       console.log('Initializing swarm.');

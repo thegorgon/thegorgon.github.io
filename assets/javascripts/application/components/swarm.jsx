@@ -2,7 +2,6 @@ var React = require('react');
 var $ = require('jquery');
 var Drawing = require('../drawing')
 var Geometry = require('../geometry')
-window.Geometry = Geometry;
 
 class Swarm extends React.Component {
   constructor(props) {
