@@ -90,7 +90,7 @@ class Kmeans extends React.Component {
     this.setState({ running: true });
     this.interval = setInterval(() => {
       this.iterate();
-    }, 2000);
+    }, 500);
   }
 
   handleStop() {
