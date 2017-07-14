@@ -8,6 +8,8 @@ class Kmeans extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      intervalLength: 500,
+      iterationTimeout: 500,
       observations: [],
       values: [],
       clusters: [],
@@ -90,7 +92,7 @@ class Kmeans extends React.Component {
     this.setState({ running: true });
     this.interval = setInterval(() => {
       this.iterate();
-    }, 500);
+    }, this.state.intervalLength);
   }
 
   handleStop() {
@@ -133,7 +135,7 @@ class Kmeans extends React.Component {
         clearInterval(this.interval);
       }
       this.setState({clusters: newClusters, running: running, convergence: convergence});
-    }, 1000);
+    }, this.state.iterationTimeout);
   }
 
   getSubtext() {

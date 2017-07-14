@@ -38713,6 +38713,8 @@ var Kmeans = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (Kmeans.__proto__ || Object.getPrototypeOf(Kmeans)).call(this, props));
 
     _this.state = {
+      intervalLength: 500,
+      iterationTimeout: 500,
       observations: [],
       values: [],
       clusters: [],
@@ -38810,7 +38812,7 @@ var Kmeans = function (_React$Component) {
       this.setState({ running: true });
       this.interval = setInterval(function () {
         _this2.iterate();
-      }, 2000);
+      }, this.state.intervalLength);
     }
   }, {
     key: 'handleStop',
@@ -38863,7 +38865,7 @@ var Kmeans = function (_React$Component) {
           clearInterval(_this3.interval);
         }
         _this3.setState({ clusters: newClusters, running: running, convergence: convergence });
-      }, 1000);
+      }, this.state.iterationTimeout);
     }
   }, {
     key: 'getSubtext',
@@ -40498,13 +40500,13 @@ module.exports = performanceNow;
 /* 106 */
 /***/ (function(module, exports) {
 
-throw new Error("Module build failed: Error: dyld: Library not loaded: /usr/local/opt/libpng/lib/libpng16.16.dylib\n  Referenced from: /Users/jessereiss/Development/personal/thegorgon.github.io/node_modules/mozjpeg/vendor/cjpeg\n  Reason: image not found\n\n    at Promise.all.then.arr (/Users/jessereiss/Development/personal/thegorgon.github.io/node_modules/execa/index.js:201:11)\n    at process._tickCallback (internal/process/next_tick.js:103:7)");
+throw new Error("Module build failed: Error: dyld: Library not loaded: /usr/local/opt/libpng/lib/libpng16.16.dylib\n  Referenced from: /Users/jessereiss/Development/personal/thegorgon.github.io/node_modules/mozjpeg/vendor/cjpeg\n  Reason: image not found\n\n    at Promise.all.then.arr (/Users/jessereiss/Development/personal/thegorgon.github.io/node_modules/execa/index.js:201:11)\n    at <anonymous>\n    at process._tickCallback (internal/process/next_tick.js:169:7)");
 
 /***/ }),
 /* 107 */
 /***/ (function(module, exports) {
 
-throw new Error("Module build failed: Error: dyld: Library not loaded: /usr/local/opt/libpng/lib/libpng16.16.dylib\n  Referenced from: /Users/jessereiss/Development/personal/thegorgon.github.io/node_modules/mozjpeg/vendor/cjpeg\n  Reason: image not found\n\n    at Promise.all.then.arr (/Users/jessereiss/Development/personal/thegorgon.github.io/node_modules/execa/index.js:201:11)\n    at process._tickCallback (internal/process/next_tick.js:103:7)");
+throw new Error("Module build failed: Error: dyld: Library not loaded: /usr/local/opt/libpng/lib/libpng16.16.dylib\n  Referenced from: /Users/jessereiss/Development/personal/thegorgon.github.io/node_modules/mozjpeg/vendor/cjpeg\n  Reason: image not found\n\n    at Promise.all.then.arr (/Users/jessereiss/Development/personal/thegorgon.github.io/node_modules/execa/index.js:201:11)\n    at <anonymous>\n    at process._tickCallback (internal/process/next_tick.js:169:7)");
 
 /***/ }),
 /* 108 */
