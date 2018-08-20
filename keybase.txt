@@ -1,0 +1,56 @@
+==================================================================
+https://keybase.io/jreiss
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://www.thegorgonlab.com
+  * I am jreiss (https://keybase.io/jreiss) on keybase.
+  * I have a public key ASDc-2-ukUCze4GG42dKHbDXU8h5iiV602vA39cAiwWrawo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0101a8f32aef92cc9ddc49a46e269dbd0fca98e972ae69ca64ddff4282306cfebe520a",
+      "host": "keybase.io",
+      "kid": "0120dcfb6fae9140b37b8186e3674a1db0d753c8798a257ad36bc0dfd7008b05ab6b0a",
+      "uid": "5e3d14ec465a4d98aac28827aa102900",
+      "username": "jreiss"
+    },
+    "merkle_root": {
+      "ctime": 1534797387,
+      "hash": "2f935fbadaf93323586488edb6ec4f902feda73e201eaca5e541ca0e8b45e18377f7ab70178093b0c55b0bf028de3ed85cc8b93a8beb4e0f703683166be55fcd",
+      "hash_meta": "24a2bfd1445ae04eca6352eddfa87441c8d1c5fe73141731c72293df24a6b57d",
+      "seqno": 3488536
+    },
+    "service": {
+      "entropy": "UhX8CXFyd8sTaNxMBLWF2A+g",
+      "hostname": "www.thegorgonlab.com",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "2.5.0"
+  },
+  "ctime": 1534797408,
+  "expire_in": 504576000,
+  "prev": "6ec0f47b811adc85b45a96c7c31ade073b496ab59fe17e642ba23cc7652f996e",
+  "seqno": 20,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEg3PtvrpFAs3uBhuNnSh2w11PIeYoletNrwN/XAIsFq2sKp3BheWxvYWTESpcCFMQgbsD0e4Ea3IW0WpbHwxreBztJarWf4X5kK6I8x2UvmW7EIP2wsrpP5ds0wdoru7Jff/9ZUw0dz8BatIrRPddHng97AgHCo3NpZ8RAct8l7VTNUloV7rcRWOWlhIn/ZE5TowoESRmr/4upIXJmmeC+3iFumJF4mE8aXZfW3Nzm6XyIVMDnoPmSpqDiDqhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIO1yIdQHTiO6QBupEu6lCeJ6TXyT3Dosu3QTg13YxJHOo3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/jreiss
+
+==================================================================
