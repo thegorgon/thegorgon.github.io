@@ -12,8 +12,6 @@
     <link rel="stylesheet" href="{{ '/assets/bundles/index.css' | prepend: site.baseurl }}?{{site.time | date: '%s%N'}}">
     <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
     <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "feed.xml" | prepend: site.baseurl | prepend: site.url }}">
-    <script type="text/javascript"
-      src="{{ '/assets/bundles/index.js' | prepend: site.baseurl }}?{{site.time | date: '%s%N'}}" charset="utf-8"></script>
   </head>
   <body>
     <div class="container">
@@ -26,5 +24,7 @@
       </header>
       {{ content }}
     </div>
+    <script type="text/javascript"
+      src="{{ '/assets/bundles/index.js' | prepend: site.baseurl }}?{{site.time | date: '%s%N'}}" charset="utf-8"></script>
   </body>
 </html>
