@@ -13,5 +13,5 @@ With two clocks implemented, I wanted to explore another iconic watch - the Mova
 
 The code isn't tested or wonderfully architected, but it was a fun exercise in using canvas, drawing with code and integrating canvas with React. You can see the inspiration photos below:
 
-<img src="{{ 'assets/images/swatch-clock.jpg' | prepend: site.baseurl }}?{{site.time | date: '%s%N'}}" width="267" height="201" alt="Swatch Wall Clock" title="Swatch Wall Clock"/>
-<img src="{{ 'assets/images/movado-watch.jpg' | prepend: site.baseurl }}?{{site.time | date: '%s%N'}}" width="165" height="202" alt="Movado Watch" title="Movado Watch"/>
+<img src="{{ '/assets/images/swatch-clock.jpg' | prepend: site.baseurl }}?{{site.time | date: '%s%N'}}" width="267" height="201" alt="Swatch Wall Clock" title="Swatch Wall Clock"/>
+<img src="{{ '/assets/images/movado-watch.jpg' | prepend: site.baseurl }}?{{site.time | date: '%s%N'}}" width="165" height="202" alt="Movado Watch" title="Movado Watch"/>
